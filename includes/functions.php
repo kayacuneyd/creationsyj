@@ -223,10 +223,46 @@ function logActivity(string $action, ?string $tableName = null, ?int $recordId =
 }
 
 /**
- * Generate picture element with WebP support and fallback.
+ * Get product image URL or placeholder if image doesn't exist.
  */
-function getPictureElement(string $filename, string $alt, string $size = 'medium', array $attributes = []): string
+function getProductImageUrl(?string $filename, string $size = 'medium'): string
 {
+    if (empty($filename)) {
+        return '/assets/images/placeholder.jpg';
+    }
+    
+    $sizeMap = [
+        'thumbnail' => '/uploads/products/thumbnail/',
+        'medium' => '/uploads/products/medium/',
+        'large' => '/uploads/products/large/',
+    ];
+    
+    $basePath = $sizeMap[$size] ?? $sizeMap['medium'];
+    $imagePath = $_SERVER['DOCUMENT_ROOT'] . $basePath . $filename;
+    
+    // Check if image file exists, if not return placeholder
+    if (!file_exists($imagePath)) {
+        return '/assets/images/placeholder.jpg';
+    }
+    
+    return $basePath . $filename;
+}
+
+/**
+ * Generate picture element with WebP support and fallback.
+ * Returns placeholder if image doesn't exist.
+ */
+function getPictureElement(?string $filename, string $alt, string $size = 'medium', array $attributes = []): string
+{
+    // If no filename or file doesn't exist, return placeholder
+    if (empty($filename)) {
+        $attrString = '';
+        foreach ($attributes as $key => $value) {
+            $attrString .= ' ' . htmlspecialchars($key, ENT_QUOTES, 'UTF-8') . '="' . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . '"';
+        }
+        return '<img src="/assets/images/placeholder.jpg" alt="' . htmlspecialchars($alt, ENT_QUOTES, 'UTF-8') . '"' . $attrString . '>';
+    }
+    
     $baseFilename = pathinfo($filename, PATHINFO_FILENAME);
     $ext = pathinfo($filename, PATHINFO_EXTENSION);
     $webpFilename = $baseFilename . '.webp';
@@ -248,6 +284,16 @@ function getPictureElement(string $filename, string $alt, string $size = 'medium
     
     $jpegSrc = $basePath . $filename;
     $webpSrc = $webpPath . $webpFilename;
+    
+    // Check if main image file exists
+    $jpegFullPath = $_SERVER['DOCUMENT_ROOT'] . $jpegSrc;
+    if (!file_exists($jpegFullPath)) {
+        $attrString = '';
+        foreach ($attributes as $key => $value) {
+            $attrString .= ' ' . htmlspecialchars($key, ENT_QUOTES, 'UTF-8') . '="' . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . '"';
+        }
+        return '<img src="/assets/images/placeholder.jpg" alt="' . htmlspecialchars($alt, ENT_QUOTES, 'UTF-8') . '"' . $attrString . '>';
+    }
     
     $attrString = '';
     foreach ($attributes as $key => $value) {
