@@ -1,0 +1,220 @@
+:root {
+    --dusty-rose: #D4A5A5;
+    --blush-pink: #F7D5D0;
+    --antique-pink: #E8B4B8;
+
+    --cream: #FAF6F0;
+    --sage-green: #B8C5B4;
+    --warm-gray: #8B7F7F;
+
+    --off-white: #FFFCF8;
+    --charcoal: #3A3232;
+    --light-gray: #E8E4DD;
+
+    --available: #B8C5B4;
+    --sold: #8B7F7F;
+    --reserved: #E8B4B8;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--charcoal);
+    background-color: var(--cream);
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    color: var(--charcoal);
+    margin-top: 0;
+}
+
+a {
+    color: var(--dusty-rose);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 1.25rem;
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.25rem;
+    border-radius: 9999px;
+    border: none;
+    background-color: var(--dusty-rose);
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--antique-pink);
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.product-card {
+    background-color: var(--off-white);
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    transition: box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.product-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    color: #fff;
+}
+
+.badge-available {
+    background-color: var(--available);
+}
+
+.badge-sold {
+    background-color: var(--sold);
+}
+
+.badge-reserved {
+    background-color: var(--reserved);
+}
+
+.site-header {
+    background-color: var(--off-white);
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.site-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1rem 1.5rem;
+}
+
+.site-nav {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.site-footer {
+    margin-top: 3rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--light-gray);
+    background-color: var(--off-white);
+    font-size: 0.9rem;
+}
+
+.hero {
+    padding: 3rem 0 2rem;
+    text-align: center;
+}
+
+.hero-title {
+    font-size: 2.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.hero-subtitle {
+    max-width: 640px;
+    margin: 0 auto 1.5rem;
+    color: var(--warm-gray);
+}
+
+.section {
+    padding: 2.5rem 0;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.input,
+.textarea,
+.select {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--light-gray);
+    background-color: #fff;
+    font-size: 0.95rem;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+    outline: none;
+    border-color: var(--dusty-rose);
+    box-shadow: 0 0 0 1px rgba(212, 165, 165, 0.5);
+}
+
+.filters-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+    .filters-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 768px) {
+    .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+

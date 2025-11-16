@@ -1,0 +1,15 @@
+vendor/
+node_modules/
+.DS_Store
+*.log
+/.idea/
+/.vscode/
+
+/uploads/products/original/
+/uploads/products/thumbnail/
+/uploads/products/medium/
+/uploads/categories/
+
+/database/backup_*.sql
+
+

@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /includes/
+Disallow: /vendor/
+
+Sitemap: https://creationsjy.com/sitemap.php
+
+
