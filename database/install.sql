@@ -167,7 +167,7 @@ ON DUPLICATE KEY UPDATE name = VALUES(name), is_default = VALUES(is_default);
 -- Password: changeme123 (CHANGE THIS IN PRODUCTION!)
 -- To generate a new password hash, use: php -r "echo password_hash('your_password', PASSWORD_BCRYPT);"
 INSERT INTO admin_users (username, email, password_hash, full_name, role) VALUES 
-('admin', 'yasemin@creationsjy.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Yasemin Jemmely', 'super_admin')
+('admin', 'yasemin@creationsjy.com', '$2y$12$.3iJE9Mo/Uviy.rUMZe1Yup.W6ofJNaKUkNvsC2uHopIxmTt0M0/', 'Yasemin Jemmely', 'super_admin')
 ON DUPLICATE KEY UPDATE email = VALUES(email), password_hash = VALUES(password_hash), full_name = VALUES(full_name), role = VALUES(role);
 
 -- Insert essential site settings
@@ -387,4 +387,3 @@ ON DUPLICATE KEY UPDATE title = VALUES(title), description = VALUES(description)
 -- Note: Sample products will use placeholder.jpg as no images are uploaded.
 -- To add images, use the admin panel after installation.
 -- ============================================
-

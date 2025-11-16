@@ -11,4 +11,10 @@ Upcycling products showcase website for Yasemin Jemmely, built with PHP 8, MySQL
 
 See `DEVELOPMENT_ROADMAP.md` for the detailed functional and technical roadmap.
 
+### Admin onboarding
+
+1. (Optional but recommended) Set `ADMIN_SIGNUP_TOKEN` in `includes/config.php` or via env vars. When empty, only the very first admin can be created (fresh install).
+2. Visit `/admin/signup.php` to create the first Super Admin. If a token is configured, enter it in the form.
+3. Subsequent accounts can be created from the admin area or again via `/admin/signup.php` using the token if you are locked out.
+4. Once logged in, change your password from **Settings → Users**.
 

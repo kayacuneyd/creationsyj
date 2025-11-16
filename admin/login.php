@@ -6,6 +6,9 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+$adminCount = (int) $pdo->query('SELECT COUNT(*) FROM admin_users')->fetchColumn();
+$allowSignupLink = $adminCount === 0 || ADMIN_SIGNUP_TOKEN !== '';
+
 if (!empty($_SESSION['admin_id'])) {
     header('Location: /admin/index.php');
     exit;
@@ -99,8 +102,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$error) {
                 Login
             </button>
         </form>
+        <?php if ($allowSignupLink): ?>
+            <p style="text-align: center; margin-top: 1rem;">
+                Need an account? <a href="/admin/signup.php">Create one here</a>.
+            </p>
+        <?php endif; ?>
     </div>
 </body>
 </html>
-
 
