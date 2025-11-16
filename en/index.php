@@ -40,6 +40,35 @@ include __DIR__ . '/../includes/header.php';
     </div>
 </section>
 
+<section class="section" style="background-color: var(--off-white);">
+    <div class="container">
+        <h2 class="section-title">The Creations JY Promise</h2>
+        <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+            <article style="background-color: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);">
+                <h3 style="margin-top: 0;">High-end upcycling</h3>
+                <p style="color: #8B7F7F; margin-bottom: 0;">
+                    Second-hand, antique and forgotten materials are sourced with care, then recomposed
+                    into one-of-a-kind decorative pieces that feel timeless.
+                </p>
+            </article>
+            <article style="background-color: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);">
+                <h3 style="margin-top: 0;">WhatsApp powered ordering</h3>
+                <p style="color: #8B7F7F; margin-bottom: 0;">
+                    The website acts as a refined showroom. When you are ready, WhatsApp Business picks up the conversation
+                    for quotes, extra photos and the final order.
+                </p>
+            </article>
+            <article style="background-color: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);">
+                <h3 style="margin-top: 0;">Shabby-chic palette</h3>
+                <p style="color: #8B7F7F; margin-bottom: 0;">
+                    Dusty rose accents, cream backdrops and warm greys echo the design system defined for the brand
+                    and set the tone for every photoshoot.
+                </p>
+            </article>
+        </div>
+    </div>
+</section>
+
 <section class="section">
     <div class="container">
         <h2 class="section-title">Featured Products</h2>
@@ -95,9 +124,38 @@ include __DIR__ . '/../includes/header.php';
                     </article>
                 <?php endforeach; ?>
             </div>
-        <?php else: ?>
+<?php else: ?>
             <p>No featured products yet.</p>
         <?php endif; ?>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">How it works</h2>
+        <ol style="padding-left: 1.25rem; color: #8B7F7F;">
+            <li style="margin-bottom: 0.5rem;">
+                Browse the mobile-first gallery to spot the latest available, reserved or sold pieces.
+            </li>
+            <li style="margin-bottom: 0.5rem;">
+                Tap the WhatsApp CTA to request a quote, a quick video or material details in real time.
+            </li>
+            <li>
+                Finalise the order, pick-up or shipping plan directly with Yasemin in the chat.
+            </li>
+        </ol>
+        <div style="margin-top: 1.5rem;">
+            <h3 style="margin-bottom: 0.5rem;">Who we create for</h3>
+            <ul style="color: #8B7F7F; padding-left: 1.25rem;">
+                <li>Vintage and shabby-chic lovers hunting for statement pieces.</li>
+                <li>Eco-conscious buyers eager to support Swiss craftsmanship.</li>
+                <li>Swiss and European clients who mostly browse on mobile (70%+ expected traffic).</li>
+            </ul>
+            <p>
+                Each item is documented from the Gruyère workshop so you can feel the textures, provenance and story
+                whether you are nearby or abroad.
+            </p>
+        </div>
     </div>
 </section>
 
@@ -114,5 +172,4 @@ include __DIR__ . '/../includes/header.php';
 </section>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
-
 

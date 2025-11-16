@@ -49,6 +49,21 @@ function getCurrentFullUrl(): string
 }
 
 /**
+ * Resolve the base site URL using the current request when possible.
+ */
+function getSiteBaseUrl(): string
+{
+    if (!empty($_SERVER['HTTP_HOST'])) {
+        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        return $scheme . '://' . $_SERVER['HTTP_HOST'];
+    }
+
+    $configuredUrl = defined('SITE_URL') ? trim(SITE_URL) : '';
+
+    return $configuredUrl !== '' ? rtrim($configuredUrl, '/') : 'http://localhost';
+}
+
+/**
  * Get current request path (without scheme/host/query).
  */
 function getCurrentPath(): string
@@ -313,5 +328,4 @@ function getPictureElement(?string $filename, string $alt, string $size = 'mediu
     
     return $html;
 }
-
 

@@ -10,10 +10,11 @@ $siteName = $currentLang === 'fr' ? 'Créations JY' : 'Creations JY';
 $pageType = $pageType ?? 'website';
 $metaData = $metaData ?? [];
 
+$baseUrl = rtrim(getSiteBaseUrl(), '/');
 $currentPath = getCurrentPath();
 $langUrls = [
-    'fr' => rtrim(SITE_URL, '/') . '/fr' . translateUrl($currentPath, 'fr'),
-    'en' => rtrim(SITE_URL, '/') . '/en' . translateUrl($currentPath, 'en'),
+    'fr' => $baseUrl . '/fr' . translateUrl($currentPath, 'fr'),
+    'en' => $baseUrl . '/en' . translateUrl($currentPath, 'en'),
 ];
 ?>
 <!DOCTYPE html>
@@ -48,7 +49,7 @@ $langUrls = [
                 $otherLang = $currentLang === 'fr' ? 'en' : 'fr';
                 $currentPath = getCurrentPath();
                 $translatedPath = translateUrl($currentPath, $otherLang);
-                $otherLangUrl = rtrim(SITE_URL, '/') . '/' . $otherLang . $translatedPath;
+                $otherLangUrl = '/' . $otherLang . $translatedPath;
                 ?>
                 <a href="<?php echo e($otherLangUrl); ?>" style="font-weight: 500;">
                     <?php echo $otherLang === 'fr' ? 'FR' : 'EN'; ?>
@@ -57,5 +58,4 @@ $langUrls = [
         </div>
     </header>
     <main>
-
 
