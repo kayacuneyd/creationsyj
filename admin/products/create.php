@@ -40,6 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $materialsEn = trim($_POST['materials_en'] ?? '');
     $dimensionsEn = trim($_POST['dimensions_en'] ?? '');
 
+    $metaTitleFr = trim($_POST['meta_title_fr'] ?? '');
+    $metaDescFr = trim($_POST['meta_description_fr'] ?? '');
+    $metaTitleEn = trim($_POST['meta_title_en'] ?? '');
+    $metaDescEn = trim($_POST['meta_description_en'] ?? '');
+
     if ($categoryId <= 0) {
         $errors[] = 'Please choose a category.';
     }
@@ -68,9 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $tStmt = $pdo->prepare("
                 INSERT INTO product_translations 
-                    (product_id, language_code, title, description, materials, dimensions)
+                    (product_id, language_code, title, description, materials, dimensions, meta_title, meta_description)
                 VALUES 
-                    (:product_id, :lang, :title, :description, :materials, :dimensions)
+                    (:product_id, :lang, :title, :description, :materials, :dimensions, :meta_title, :meta_description)
             ");
 
             $tStmt->execute([
@@ -80,6 +85,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'description' => $descFr,
                 'materials' => $materialsFr,
                 'dimensions' => $dimensionsFr,
+                'meta_title' => $metaTitleFr !== '' ? $metaTitleFr : null,
+                'meta_description' => $metaDescFr !== '' ? $metaDescFr : null,
             ]);
 
             $tStmt->execute([
@@ -89,10 +96,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'description' => $descEn,
                 'materials' => $materialsEn,
                 'dimensions' => $dimensionsEn,
+                'meta_title' => $metaTitleEn !== '' ? $metaTitleEn : null,
+                'meta_description' => $metaDescEn !== '' ? $metaDescEn : null,
             ]);
+
+            // Handle image uploads if any
+            if (isset($_FILES['images']) && !empty($_FILES['images']['name'][0])) {
+                require_once __DIR__ . '/upload-image.php';
+                handleImageUpload($productId, $_FILES['images']);
+            }
 
             $pdo->commit();
             $success = true;
+            
+            // Log activity
+            logActivity('product_created', 'products', $productId, 'Product created: ' . $titleEn);
+            
+            // Redirect to edit page to allow adding more images
+            header('Location: /admin/products/edit.php?id=' . $productId);
+            exit;
         } catch (Throwable $e) {
             $pdo->rollBack();
             $errors[] = 'Error saving product: ' . $e->getMessage();
@@ -106,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="utf-8">
     <title>Create product · Admin · Creations JY</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
 </head>
 <body>
     <header class="site-header">
@@ -136,7 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </ul>
                 <?php endif; ?>
 
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     <input type="hidden" name="csrf_token" value="<?php echo e(generateCSRFToken()); ?>">
 
                     <h2>Basics</h2>
@@ -189,6 +211,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="dimensions_fr">Dimensions (FR)</label>
                         <input id="dimensions_fr" name="dimensions_fr" type="text" class="input">
                     </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label for="meta_title_fr">Meta Title (FR) - SEO</label>
+                        <input id="meta_title_fr" name="meta_title_fr" type="text" class="input" maxlength="70">
+                        <small style="display: block; margin-top: 0.25rem; color: #8B7F7F;">Recommended: 50-60 characters</small>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label for="meta_description_fr">Meta Description (FR) - SEO</label>
+                        <textarea id="meta_description_fr" name="meta_description_fr" rows="2" class="textarea" maxlength="160"></textarea>
+                        <small style="display: block; margin-top: 0.25rem; color: #8B7F7F;">Recommended: 150-160 characters</small>
+                    </div>
 
                     <h2>Content (EN)</h2>
                     <div style="margin-bottom: 1rem;">
@@ -207,6 +239,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="dimensions_en">Dimensions (EN)</label>
                         <input id="dimensions_en" name="dimensions_en" type="text" class="input">
                     </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label for="meta_title_en">Meta Title (EN) - SEO</label>
+                        <input id="meta_title_en" name="meta_title_en" type="text" class="input" maxlength="70">
+                        <small style="display: block; margin-top: 0.25rem; color: #8B7F7F;">Recommended: 50-60 characters</small>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label for="meta_description_en">Meta Description (EN) - SEO</label>
+                        <textarea id="meta_description_en" name="meta_description_en" rows="2" class="textarea" maxlength="160"></textarea>
+                        <small style="display: block; margin-top: 0.25rem; color: #8B7F7F;">Recommended: 150-160 characters</small>
+                    </div>
+
+                    <h2>Images</h2>
+                    <div style="margin-bottom: 1rem;">
+                        <label for="images">Product Images</label>
+                        <input id="images" name="images[]" type="file" class="input" accept="image/jpeg,image/png,image/webp" multiple>
+                        <small style="display: block; margin-top: 0.25rem; color: #8B7F7F;">
+                            You can select multiple images. Supported formats: JPEG, PNG, WebP (max 5MB each)
+                        </small>
+                        <div id="image-preview" style="margin-top: 1rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.5rem;"></div>
+                    </div>
 
                     <button type="submit" class="btn-primary" style="margin-top: 1rem;">
                         Save product
@@ -215,6 +267,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </section>
     </main>
+    <script>
+        // Image preview functionality
+        document.getElementById('images').addEventListener('change', function(e) {
+            const preview = document.getElementById('image-preview');
+            preview.innerHTML = '';
+            
+            const files = Array.from(e.target.files);
+            files.forEach(function(file) {
+                if (!file.type.startsWith('image/')) {
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.width = '100%';
+                    img.style.height = '120px';
+                    img.style.objectFit = 'cover';
+                    img.style.borderRadius = '0.5rem';
+                    img.style.border = '1px solid #E8E4DD';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
 </body>
 </html>
 

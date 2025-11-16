@@ -46,6 +46,15 @@ $topProducts = $pdo->query("
     ORDER BY p.view_count DESC
     LIMIT 5
 ")->fetchAll();
+
+// Recent activity logs
+$recentActivities = $pdo->query("
+    SELECT al.*, au.username
+    FROM activity_logs al
+    LEFT JOIN admin_users au ON al.admin_id = au.id
+    ORDER BY al.created_at DESC
+    LIMIT 10
+")->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,7 +62,7 @@ $topProducts = $pdo->query("
     <meta charset="utf-8">
     <title>Admin Dashboard · Creations JY</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
 </head>
 <body>
     <header class="site-header">
@@ -133,6 +142,30 @@ $topProducts = $pdo->query("
                             </ul>
                         <?php else: ?>
                             <p>No products yet.</p>
+                        <?php endif; ?>
+                    </div>
+                    <div>
+                        <h2>Recent Activity</h2>
+                        <?php if ($recentActivities): ?>
+                            <ul style="list-style: none; padding: 0;">
+                                <?php foreach ($recentActivities as $activity): ?>
+                                    <li style="padding: 0.5rem 0; border-bottom: 1px solid #E8E4DD;">
+                                        <strong><?php echo e($activity['action']); ?></strong>
+                                        <?php if ($activity['username']): ?>
+                                            <span style="color: #8B7F7F;">by <?php echo e($activity['username']); ?></span>
+                                        <?php endif; ?>
+                                        <br>
+                                        <small style="color: #8B7F7F;">
+                                            <?php echo e($activity['created_at']); ?>
+                                            <?php if ($activity['details']): ?>
+                                                · <?php echo e(mb_substr($activity['details'], 0, 60, 'UTF-8')); ?>
+                                            <?php endif; ?>
+                                        </small>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php else: ?>
+                            <p>No activity yet.</p>
                         <?php endif; ?>
                     </div>
                 </div>

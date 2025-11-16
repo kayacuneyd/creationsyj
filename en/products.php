@@ -18,6 +18,7 @@ $categories = $categoriesStmt->fetchAll();
 $status = $_GET['status'] ?? '';
 $categoryId = isset($_GET['category']) ? (int) $_GET['category'] : null;
 $search = trim($_GET['q'] ?? '');
+$sort = $_GET['sort'] ?? 'newest';
 $page = max(1, (int) ($_GET['page'] ?? 1));
 $perPage = 12;
 $offset = ($page - 1) * $perPage;
@@ -41,6 +42,21 @@ if ($search !== '') {
 }
 
 $whereSql = $where ? ('WHERE ' . implode(' AND ', $where)) : '';
+
+// Build ORDER BY clause
+$orderBy = 'p.created_at DESC'; // default: newest
+switch ($sort) {
+    case 'oldest':
+        $orderBy = 'p.created_at ASC';
+        break;
+    case 'a-z':
+        $orderBy = 'pt.title ASC';
+        break;
+    case 'newest':
+    default:
+        $orderBy = 'p.created_at DESC';
+        break;
+}
 
 $countSql = "
     SELECT COUNT(*) AS total
@@ -68,7 +84,7 @@ $sql = "
     JOIN product_translations pt 
       ON p.id = pt.product_id AND pt.language_code = 'en'
     $whereSql
-    ORDER BY p.created_at DESC
+    ORDER BY $orderBy
     LIMIT :limit OFFSET :offset
 ";
 
@@ -113,6 +129,14 @@ include __DIR__ . '/../includes/header.php';
                 <label for="q">Search</label>
                 <input id="q" name="q" type="search" class="input" placeholder="Search for a product…" value="<?php echo e($search); ?>" data-product-search>
             </div>
+            <div>
+                <label for="sort">Sort by</label>
+                <select id="sort" name="sort" class="select">
+                    <option value="newest" <?php echo $sort === 'newest' ? 'selected' : ''; ?>>Newest</option>
+                    <option value="oldest" <?php echo $sort === 'oldest' ? 'selected' : ''; ?>>Oldest</option>
+                    <option value="a-z" <?php echo $sort === 'a-z' ? 'selected' : ''; ?>>A-Z</option>
+                </select>
+            </div>
             <div style="align-self: end;">
                 <button type="submit" class="btn-primary">
                     Filter
@@ -134,7 +158,18 @@ include __DIR__ . '/../includes/header.php';
                     <article class="product-card" data-product-card data-title="<?php echo e($product['title']); ?>">
                         <div class="relative">
                             <?php if ($product['image']): ?>
-                                <img src="/uploads/products/thumbnail/<?php echo e($product['image']); ?>" alt="<?php echo e($product['title']); ?>" loading="lazy">
+                                <?php
+                                $thumbWebpFilename = pathinfo($product['image'], PATHINFO_FILENAME) . '.webp';
+                                $thumbWebpPath = '/uploads/products/thumbnail/webp/' . $thumbWebpFilename;
+                                $thumbJpegPath = '/uploads/products/thumbnail/' . $product['image'];
+                                $thumbWebpExists = file_exists($_SERVER['DOCUMENT_ROOT'] . $thumbWebpPath);
+                                ?>
+                                <picture>
+                                    <?php if ($thumbWebpExists): ?>
+                                        <source srcset="<?php echo e($thumbWebpPath); ?>" type="image/webp">
+                                    <?php endif; ?>
+                                    <img src="<?php echo e($thumbJpegPath); ?>" alt="<?php echo e($product['title']); ?>" loading="lazy">
+                                </picture>
                             <?php else: ?>
                                 <img src="/assets/images/placeholder.jpg" alt="<?php echo e($product['title']); ?>" loading="lazy">
                             <?php endif; ?>

@@ -34,25 +34,37 @@ function getProductById(int $productId): ?array
 /**
  * Build a WhatsApp deeplink URL with optional product context.
  */
-function getWhatsAppLink(?int $productId = null, string $customMessage = ''): string
+function getWhatsAppLink(?int $productId = null, string $customMessage = '', ?string $customerName = null): string
 {
     $phone = str_replace(['+', ' ', '-'], '', WHATSAPP_NUMBER);
+    $lang = getCurrentLanguage();
 
-    $message = "Bonjour, je suis intéressé(e) par vos créations.";
+    $message = $lang === 'fr' 
+        ? "Bonjour, je suis intéressé(e) par vos créations."
+        : "Hello, I'm interested in your creations.";
+
+    if ($customerName) {
+        $message = ($lang === 'fr' ? 'Bonjour, je m\'appelle ' : 'Hello, my name is ') . $customerName . '. ';
+        $message .= $lang === 'fr' 
+            ? "Je suis intéressé(e) par vos créations."
+            : "I'm interested in your creations.";
+    }
 
     if ($productId) {
         $product = getProductById($productId);
 
         if ($product) {
-            $lang = getCurrentLanguage();
             $productPath = $lang === 'fr' ? '/fr/produit/' : '/en/product/';
             $productUrl = rtrim(SITE_URL, '/') . $productPath . $product['slug'];
-            $message = 'Bonjour, je suis intéressé(e) par ce produit: ' . $product['title'] . ' - ' . $productUrl;
+            $message = ($lang === 'fr' 
+                ? 'Bonjour' . ($customerName ? ', je m\'appelle ' . $customerName : '') . ', je suis intéressé(e) par ce produit: ' 
+                : 'Hello' . ($customerName ? ', my name is ' . $customerName : '') . ', I\'m interested in this product: ') 
+                . $product['title'] . ' - ' . $productUrl;
         }
     }
 
     if ($customMessage !== '') {
-        $message .= ' ' . $customMessage;
+        $message .= "\n\n" . $customMessage;
     }
 
     return 'https://wa.me/' . $phone . '?text=' . urlencode($message);

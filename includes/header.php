@@ -43,6 +43,16 @@ $langUrls = [
                 <a href="<?php echo $currentLang === 'fr' ? '/fr/a-propos.php' : '/en/about.php'; ?>"><?php echo e(t('about')); ?></a>
                 <a href="<?php echo $currentLang === 'fr' ? '/fr/produits.php' : '/en/products.php'; ?>"><?php echo e(t('products')); ?></a>
                 <a href="<?php echo $currentLang === 'fr' ? '/fr/contact.php' : '/en/contact.php'; ?>"><?php echo e(t('contact')); ?></a>
+                <span style="margin: 0 0.5rem; color: #8B7F7F;">|</span>
+                <?php
+                $otherLang = $currentLang === 'fr' ? 'en' : 'fr';
+                $currentPath = getCurrentPath();
+                $translatedPath = translateUrl($currentPath, $otherLang);
+                $otherLangUrl = rtrim(SITE_URL, '/') . '/' . $otherLang . $translatedPath;
+                ?>
+                <a href="<?php echo e($otherLangUrl); ?>" style="font-weight: 500;">
+                    <?php echo $otherLang === 'fr' ? 'FR' : 'EN'; ?>
+                </a>
             </nav>
         </div>
     </header>

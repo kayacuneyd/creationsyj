@@ -7,6 +7,17 @@ $lang = 'fr';
 $errors = [];
 $success = false;
 
+// Load site settings
+$settings = [];
+$stmt = $pdo->query('SELECT setting_key, setting_value FROM site_settings');
+foreach ($stmt as $row) {
+    $settings[$row['setting_key']] = $row['setting_value'];
+}
+
+$contactEmail = $settings['contact_email'] ?? 'contact@creationsjy.com';
+$whatsappNumber = $settings['whatsapp_number'] ?? '+41XXXXXXXXX';
+$instagramUrl = $settings['instagram_url'] ?? 'https://instagram.com/creationsjy';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
@@ -30,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (!$errors) {
-        $to = 'contact@creationsjy.com';
+        $to = $contactEmail;
         $subject = 'Nouveau message via le site Créations JY';
         $body = "Nom: $name\nEmail: $email\n\n$message";
         $headers = 'From: ' . $email . "\r\n" .
@@ -88,9 +99,9 @@ include __DIR__ . '/../includes/header.php';
         </form>
 
         <div style="margin-top: 2rem;">
-            <p><strong>E-mail</strong>: <a href="mailto:contact@creationsjy.com">contact@creationsjy.com</a></p>
-            <p><strong>WhatsApp</strong>: <a href="https://wa.me/41XXXXXXXXX" target="_blank" rel="noopener">+41&nbsp;XX&nbsp;XXX&nbsp;XX&nbsp;XX</a></p>
-            <p><strong>Instagram</strong>: <a href="https://instagram.com/creationsjy" target="_blank" rel="noopener">@creationsjy</a></p>
+            <p><strong>E-mail</strong>: <a href="mailto:<?php echo e($contactEmail); ?>"><?php echo e($contactEmail); ?></a></p>
+            <p><strong>WhatsApp</strong>: <a href="https://wa.me/<?php echo e(str_replace(['+', ' ', '-'], '', $whatsappNumber)); ?>" target="_blank" rel="noopener"><?php echo e($whatsappNumber); ?></a></p>
+            <p><strong>Instagram</strong>: <a href="<?php echo e($instagramUrl); ?>" target="_blank" rel="noopener"><?php echo e(parse_url($instagramUrl, PHP_URL_HOST) ?: '@creationsjy'); ?></a></p>
         </div>
     </div>
 </section>

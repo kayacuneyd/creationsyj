@@ -21,8 +21,11 @@ if ($productId <= 0) {
 
 global $pdo;
 
-$stmt = $pdo->prepare('INSERT INTO whatsapp_inquiries (product_id) VALUES (?)');
-$stmt->execute([$productId]);
+$customerName = isset($payload['customer_name']) ? trim($payload['customer_name']) : null;
+$message = isset($payload['message']) ? trim($payload['message']) : null;
+
+$stmt = $pdo->prepare('INSERT INTO whatsapp_inquiries (product_id, customer_name, message) VALUES (?, ?, ?)');
+$stmt->execute([$productId, $customerName, $message]);
 
 $pdo->prepare('UPDATE products SET view_count = view_count + 1 WHERE id = ?')
     ->execute([$productId]);

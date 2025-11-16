@@ -92,7 +92,8 @@ CREATE TABLE admin_users (
 CREATE TABLE whatsapp_inquiries (
     id INT PRIMARY KEY AUTO_INCREMENT,
     product_id INT,
-    user_phone VARCHAR(20),
+    customer_name VARCHAR(255),
+    message TEXT,
     inquiry_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL,
     INDEX idx_product (product_id),
@@ -120,6 +121,18 @@ CREATE TABLE activity_logs (
     FOREIGN KEY (admin_id) REFERENCES admin_users(id) ON DELETE SET NULL,
     INDEX idx_admin (admin_id),
     INDEX idx_date (created_at)
+);
+
+-- Login Attempts (Rate limiting)
+CREATE TABLE login_attempts (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    identifier VARCHAR(255) NOT NULL, -- IP address or username
+    attempt_type ENUM('ip', 'username') NOT NULL,
+    attempts INT DEFAULT 1,
+    blocked_until TIMESTAMP NULL,
+    last_attempt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_identifier (identifier, attempt_type),
+    INDEX idx_blocked (blocked_until)
 );
 
 -- Base data inserts

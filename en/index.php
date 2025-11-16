@@ -57,7 +57,18 @@ include __DIR__ . '/../includes/header.php';
                     <article class="product-card" data-product-card data-title="<?php echo e($product['title']); ?>">
                         <div class="relative">
                             <?php if ($product['image']): ?>
-                                <img src="/uploads/products/thumbnail/<?php echo e($product['image']); ?>" alt="<?php echo e($product['title']); ?>" loading="lazy">
+                                <?php
+                                $thumbWebpFilename = pathinfo($product['image'], PATHINFO_FILENAME) . '.webp';
+                                $thumbWebpPath = '/uploads/products/thumbnail/webp/' . $thumbWebpFilename;
+                                $thumbJpegPath = '/uploads/products/thumbnail/' . $product['image'];
+                                $thumbWebpExists = file_exists($_SERVER['DOCUMENT_ROOT'] . $thumbWebpPath);
+                                ?>
+                                <picture>
+                                    <?php if ($thumbWebpExists): ?>
+                                        <source srcset="<?php echo e($thumbWebpPath); ?>" type="image/webp">
+                                    <?php endif; ?>
+                                    <img src="<?php echo e($thumbJpegPath); ?>" alt="<?php echo e($product['title']); ?>" loading="lazy">
+                                </picture>
                             <?php else: ?>
                                 <img src="/assets/images/placeholder.jpg" alt="<?php echo e($product['title']); ?>" loading="lazy">
                             <?php endif; ?>

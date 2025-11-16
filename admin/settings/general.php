@@ -48,6 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $success = true;
         $settings = array_merge($settings, $pairs);
+        
+        // Log activity
+        logActivity('settings_updated', 'site_settings', null, 'General settings updated');
     }
 }
 ?>
@@ -57,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="utf-8">
     <title>General settings · Admin · Creations JY</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
 </head>
 <body>
     <header class="site-header">

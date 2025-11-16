@@ -61,4 +61,211 @@ function getCurrentPath(): string
     return $uri ?: '/';
 }
 
+/**
+ * Get client IP address.
+ */
+function getClientIp(): string
+{
+    $ipKeys = ['HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_REAL_IP', 'REMOTE_ADDR'];
+    foreach ($ipKeys as $key) {
+        if (!empty($_SERVER[$key])) {
+            $ip = trim(explode(',', $_SERVER[$key])[0]);
+            if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+                return $ip;
+            }
+        }
+    }
+    return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+}
+
+/**
+ * Check if login is blocked for identifier (IP or username).
+ */
+function isLoginBlocked(string $identifier, string $type = 'ip'): bool
+{
+    global $pdo;
+    
+    $stmt = $pdo->prepare('
+        SELECT blocked_until 
+        FROM login_attempts 
+        WHERE identifier = :identifier 
+          AND attempt_type = :type 
+          AND blocked_until > NOW()
+        LIMIT 1
+    ');
+    $stmt->execute(['identifier' => $identifier, 'type' => $type]);
+    $result = $stmt->fetch();
+    
+    return $result !== false;
+}
+
+/**
+ * Record a failed login attempt.
+ */
+function recordFailedLogin(string $identifier, string $type = 'ip'): void
+{
+    global $pdo;
+    
+    $maxAttempts = 5;
+    $blockDuration = 15 * 60; // 15 minutes in seconds
+    
+    $stmt = $pdo->prepare('
+        SELECT attempts, blocked_until 
+        FROM login_attempts 
+        WHERE identifier = :identifier 
+          AND attempt_type = :type
+        LIMIT 1
+    ');
+    $stmt->execute(['identifier' => $identifier, 'type' => $type]);
+    $existing = $stmt->fetch();
+    
+    if ($existing) {
+        $newAttempts = $existing['attempts'] + 1;
+        $blockedUntil = null;
+        
+        if ($newAttempts >= $maxAttempts) {
+            $blockedUntil = date('Y-m-d H:i:s', time() + $blockDuration);
+        }
+        
+        $updateStmt = $pdo->prepare('
+            UPDATE login_attempts 
+            SET attempts = :attempts, 
+                blocked_until = :blocked_until,
+                last_attempt = NOW()
+            WHERE identifier = :identifier 
+              AND attempt_type = :type
+        ');
+        $updateStmt->execute([
+            'attempts' => $newAttempts,
+            'blocked_until' => $blockedUntil,
+            'identifier' => $identifier,
+            'type' => $type,
+        ]);
+    } else {
+        $blockedUntil = null;
+        if ($maxAttempts <= 1) {
+            $blockedUntil = date('Y-m-d H:i:s', time() + $blockDuration);
+        }
+        
+        $insertStmt = $pdo->prepare('
+            INSERT INTO login_attempts (identifier, attempt_type, attempts, blocked_until)
+            VALUES (:identifier, :type, 1, :blocked_until)
+        ');
+        $insertStmt->execute([
+            'identifier' => $identifier,
+            'type' => $type,
+            'blocked_until' => $blockedUntil,
+        ]);
+    }
+}
+
+/**
+ * Clear login attempts for identifier (on successful login).
+ */
+function clearLoginAttempts(string $identifier, string $type = 'ip'): void
+{
+    global $pdo;
+    
+    $stmt = $pdo->prepare('DELETE FROM login_attempts WHERE identifier = :identifier AND attempt_type = :type');
+    $stmt->execute(['identifier' => $identifier, 'type' => $type]);
+}
+
+/**
+ * Get remaining block time in minutes.
+ */
+function getRemainingBlockTime(string $identifier, string $type = 'ip'): ?int
+{
+    global $pdo;
+    
+    $stmt = $pdo->prepare('
+        SELECT TIMESTAMPDIFF(SECOND, NOW(), blocked_until) AS seconds
+        FROM login_attempts 
+        WHERE identifier = :identifier 
+          AND attempt_type = :type 
+          AND blocked_until > NOW()
+        LIMIT 1
+    ');
+    $stmt->execute(['identifier' => $identifier, 'type' => $type]);
+    $result = $stmt->fetch();
+    
+    if ($result && $result['seconds'] > 0) {
+        return (int) ceil($result['seconds'] / 60);
+    }
+    
+    return null;
+}
+
+/**
+ * Log admin activity.
+ */
+function logActivity(string $action, ?string $tableName = null, ?int $recordId = null, ?string $details = null, ?int $adminId = null): void
+{
+    global $pdo;
+    
+    if ($adminId === null) {
+        $adminId = $_SESSION['admin_id'] ?? null;
+    }
+    
+    $ipAddress = getClientIp();
+    
+    $stmt = $pdo->prepare('
+        INSERT INTO activity_logs (admin_id, action, table_name, record_id, details, ip_address)
+        VALUES (:admin_id, :action, :table_name, :record_id, :details, :ip_address)
+    ');
+    $stmt->execute([
+        'admin_id' => $adminId,
+        'action' => $action,
+        'table_name' => $tableName,
+        'record_id' => $recordId,
+        'details' => $details,
+        'ip_address' => $ipAddress,
+    ]);
+}
+
+/**
+ * Generate picture element with WebP support and fallback.
+ */
+function getPictureElement(string $filename, string $alt, string $size = 'medium', array $attributes = []): string
+{
+    $baseFilename = pathinfo($filename, PATHINFO_FILENAME);
+    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+    $webpFilename = $baseFilename . '.webp';
+    
+    $sizeMap = [
+        'thumbnail' => '/uploads/products/thumbnail/',
+        'medium' => '/uploads/products/medium/',
+        'large' => '/uploads/products/large/',
+    ];
+    
+    $webpSizeMap = [
+        'thumbnail' => '/uploads/products/thumbnail/webp/',
+        'medium' => '/uploads/products/medium/webp/',
+        'large' => '/uploads/products/large/webp/',
+    ];
+    
+    $basePath = $sizeMap[$size] ?? $sizeMap['medium'];
+    $webpPath = $webpSizeMap[$size] ?? $webpSizeMap['medium'];
+    
+    $jpegSrc = $basePath . $filename;
+    $webpSrc = $webpPath . $webpFilename;
+    
+    $attrString = '';
+    foreach ($attributes as $key => $value) {
+        $attrString .= ' ' . htmlspecialchars($key, ENT_QUOTES, 'UTF-8') . '="' . htmlspecialchars($value, ENT_QUOTES, 'UTF-8') . '"';
+    }
+    
+    $html = '<picture>';
+    
+    // Check if WebP file exists
+    $webpFullPath = $_SERVER['DOCUMENT_ROOT'] . $webpSrc;
+    if (file_exists($webpFullPath)) {
+        $html .= '<source srcset="' . htmlspecialchars($webpSrc, ENT_QUOTES, 'UTF-8') . '" type="image/webp">';
+    }
+    
+    $html .= '<img src="' . htmlspecialchars($jpegSrc, ENT_QUOTES, 'UTF-8') . '" alt="' . htmlspecialchars($alt, ENT_QUOTES, 'UTF-8') . '"' . $attrString . '>';
+    $html .= '</picture>';
+    
+    return $html;
+}
+
 

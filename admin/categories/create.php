@@ -56,6 +56,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $pdo->commit();
             $success = true;
+            
+            // Log activity
+            logActivity('category_created', 'categories', $categoryId, 'Category created: ' . $nameEn);
         } catch (Throwable $e) {
             $pdo->rollBack();
             $errors[] = 'Error saving category: ' . $e->getMessage();
@@ -69,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="utf-8">
     <title>Create category · Admin · Creations JY</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
 </head>
 <body>
     <header class="site-header">

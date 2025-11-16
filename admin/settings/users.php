@@ -45,7 +45,7 @@ $users = $pdo->query('SELECT id, username, email, role FROM admin_users ORDER BY
     <meta charset="utf-8">
     <title>Admin users · Admin · Creations JY</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
 </head>
 <body>
     <header class="site-header">

@@ -12,8 +12,15 @@ if (!empty($_SESSION['admin_id'])) {
 }
 
 $error = '';
+$ipAddress = getClientIp();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Check if IP is blocked
+if (isLoginBlocked($ipAddress, 'ip')) {
+    $remaining = getRemainingBlockTime($ipAddress, 'ip');
+    $error = 'Too many failed login attempts. Please try again in ' . ($remaining ?? 15) . ' minutes.';
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$error) {
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
     $token = $_POST['csrf_token'] ?? null;
@@ -23,21 +30,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($username === '' || $password === '') {
         $error = 'Please fill in all fields.';
     } else {
-        $stmt = $pdo->prepare('SELECT * FROM admin_users WHERE username = ? LIMIT 1');
-        $stmt->execute([$username]);
-        $user = $stmt->fetch();
-
-        if ($user && password_verify($password, $user['password_hash'])) {
-            $_SESSION['admin_id'] = $user['id'];
-            $_SESSION['admin_role'] = $user['role'];
-
-            $update = $pdo->prepare('UPDATE admin_users SET last_login = NOW() WHERE id = ?');
-            $update->execute([$user['id']]);
-
-            header('Location: /admin/index.php');
-            exit;
+        // Check if username is blocked
+        if (isLoginBlocked($username, 'username')) {
+            $remaining = getRemainingBlockTime($username, 'username');
+            $error = 'Too many failed login attempts for this username. Please try again in ' . ($remaining ?? 15) . ' minutes.';
         } else {
-            $error = 'Invalid credentials.';
+            $stmt = $pdo->prepare('SELECT * FROM admin_users WHERE username = ? LIMIT 1');
+            $stmt->execute([$username]);
+            $user = $stmt->fetch();
+
+            if ($user && password_verify($password, $user['password_hash'])) {
+                // Successful login - clear attempts
+                clearLoginAttempts($ipAddress, 'ip');
+                clearLoginAttempts($username, 'username');
+                
+                $_SESSION['admin_id'] = $user['id'];
+                $_SESSION['admin_role'] = $user['role'];
+
+                $update = $pdo->prepare('UPDATE admin_users SET last_login = NOW() WHERE id = ?');
+                $update->execute([$user['id']]);
+
+                header('Location: /admin/index.php');
+                exit;
+            } else {
+                // Failed login - record attempts
+                recordFailedLogin($ipAddress, 'ip');
+                recordFailedLogin($username, 'username');
+                
+                // Check if now blocked
+                if (isLoginBlocked($ipAddress, 'ip') || isLoginBlocked($username, 'username')) {
+                    $remaining = getRemainingBlockTime($ipAddress, 'ip') ?? getRemainingBlockTime($username, 'username');
+                    $error = 'Too many failed login attempts. Please try again in ' . ($remaining ?? 15) . ' minutes.';
+                } else {
+                    $error = 'Invalid credentials.';
+                }
+            }
         }
     }
 }
@@ -48,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="utf-8">
     <title>Admin Login · Creations JY</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
 </head>
 <body style="background-color: #FAF6F0;">
     <div class="container" style="max-width: 420px; padding-top: 4rem;">

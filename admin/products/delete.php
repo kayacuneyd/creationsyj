@@ -23,8 +23,16 @@ if ($id <= 0) {
     exit('Invalid product id');
 }
 
+// Get product title before deletion for logging
+$titleStmt = $pdo->prepare('SELECT title FROM product_translations WHERE product_id = :id AND language_code = "en" LIMIT 1');
+$titleStmt->execute(['id' => $id]);
+$productTitle = $titleStmt->fetchColumn() ?: 'Unknown';
+
 $stmt = $pdo->prepare('DELETE FROM products WHERE id = :id');
 $stmt->execute(['id' => $id]);
+
+// Log activity
+logActivity('product_deleted', 'products', $id, 'Product deleted: ' . $productTitle);
 
 header('Location: /admin/products/index.php');
 exit;
