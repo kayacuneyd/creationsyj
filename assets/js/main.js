@@ -4,8 +4,28 @@ document.addEventListener('DOMContentLoaded', function () {
     var navMenu = document.querySelector('[data-nav-menu]');
 
     if (navToggle && navMenu) {
+        var navLinks = navMenu.querySelectorAll('a');
+
+        function closeNav() {
+            navMenu.classList.remove('is-open');
+            navToggle.classList.remove('active');
+            document.body.classList.remove('nav-open');
+        }
+
         navToggle.addEventListener('click', function () {
-            navMenu.classList.toggle('is-open');
+            var isOpen = navMenu.classList.toggle('is-open');
+            navToggle.classList.toggle('active', isOpen);
+            document.body.classList.toggle('nav-open', isOpen);
+        });
+
+        navLinks.forEach(function (link) {
+            link.addEventListener('click', closeNav);
+        });
+
+        window.addEventListener('resize', function () {
+            if (window.innerWidth > 768 && navMenu.classList.contains('is-open')) {
+                closeNav();
+            }
         });
     }
 
@@ -172,5 +192,4 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
-
 
