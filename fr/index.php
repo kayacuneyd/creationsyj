@@ -26,17 +26,21 @@ $stmt = $pdo->query("
 ");
 $featuredProducts = $stmt->fetchAll();
 
+$heroTitle = getSiteSetting('hero_title_fr', 'Donnez une seconde vie à vos objets');
+$heroSubtitle = getSiteSetting('hero_subtitle_fr', 'Créations uniques fabriquées à partir de matériaux recyclés par Yasemin Jemmely, en Gruyère.');
+$heroCta = getSiteSetting('hero_cta_fr', 'Découvrir les créations');
+
 include __DIR__ . '/../includes/header.php';
 ?>
 
 <section class="hero">
     <div class="container">
-        <h1 class="hero-title">Donnez une seconde vie à vos objets</h1>
+        <h1 class="hero-title"><?php echo e($heroTitle); ?></h1>
         <p class="hero-subtitle">
-            Créations uniques fabriquées à partir de matériaux recyclés par Yasemin Jemmely, en Gruyère.
+            <?php echo e($heroSubtitle); ?>
         </p>
         <a href="/fr/produits.php" class="btn-primary">
-            Découvrir les créations
+            <?php echo e($heroCta); ?>
         </a>
     </div>
 </section>
@@ -173,4 +177,3 @@ include __DIR__ . '/../includes/header.php';
 </section>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
-

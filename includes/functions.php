@@ -77,6 +77,74 @@ function getCurrentPath(): string
 }
 
 /**
+ * Load site settings once per request (cached helper).
+ */
+function getSiteSettingsCache(bool $reset = false): array
+{
+    static $settingsCache = null;
+
+    if ($reset) {
+        $settingsCache = null;
+    }
+
+    if ($settingsCache !== null) {
+        return $settingsCache;
+    }
+
+    global $pdo;
+
+    if (!isset($pdo)) {
+        $dbPath = __DIR__ . '/db.php';
+        if (file_exists($dbPath)) {
+            require_once $dbPath;
+        }
+    }
+
+    if (!isset($pdo)) {
+        return $settingsCache = [];
+    }
+
+    try {
+        $stmt = $pdo->query('SELECT setting_key, setting_value FROM site_settings');
+    } catch (Throwable $e) {
+        return $settingsCache = [];
+    }
+
+    $settingsCache = [];
+    foreach ($stmt as $row) {
+        $settingsCache[$row['setting_key']] = $row['setting_value'];
+    }
+
+    return $settingsCache;
+}
+
+/**
+ * Fetch a single site setting by key with optional fallback.
+ */
+function getSiteSetting(string $key, ?string $default = null): ?string
+{
+    $settings = getSiteSettingsCache();
+    return array_key_exists($key, $settings) ? $settings[$key] : $default;
+}
+
+/**
+ * Clear cached settings (useful after updates from admin).
+ */
+function refreshSiteSettingsCache(): void
+{
+    getSiteSettingsCache(true);
+}
+
+/**
+ * Get the WhatsApp number configured in settings with fallback to config constant.
+ */
+function getWhatsAppNumber(): string
+{
+    $number = getSiteSetting('whatsapp_number');
+    return $number !== null && $number !== '' ? $number : WHATSAPP_NUMBER;
+}
+
+/**
  * Get client IP address.
  */
 function getClientIp(): string
@@ -328,4 +396,3 @@ function getPictureElement(?string $filename, string $alt, string $size = 'mediu
     
     return $html;
 }
-

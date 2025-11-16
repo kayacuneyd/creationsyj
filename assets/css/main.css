@@ -173,6 +173,32 @@ a:hover {
     margin-bottom: 1.5rem;
 }
 
+.about-media-block {
+    margin: 1.5rem 0 2rem;
+    border-radius: 1rem;
+    background-color: #fff;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--light-gray);
+    overflow: hidden;
+}
+
+.about-media-block figure {
+    margin: 0;
+}
+
+.about-media-block img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.about-media-caption {
+    margin: 0;
+    padding: 0.85rem 1.25rem 1.25rem;
+    color: var(--warm-gray);
+    font-size: 0.9rem;
+}
+
 .input,
 .textarea,
 .select {
@@ -388,5 +414,4 @@ a:hover {
         height: 35px;
     }
 }
-
 

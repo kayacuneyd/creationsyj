@@ -4,6 +4,8 @@ require_once __DIR__ . '/../includes/functions.php';
 require_once __DIR__ . '/../includes/language.php';
 
 $lang = 'en';
+$aboutMediaUrl = getSiteSetting('about_media_url');
+$aboutMediaUrl = $aboutMediaUrl !== null && $aboutMediaUrl !== '' ? $aboutMediaUrl : '/assets/images/placeholder.jpg';
 
 include __DIR__ . '/../includes/header.php';
 ?>
@@ -16,6 +18,16 @@ include __DIR__ . '/../includes/header.php';
             and second-hand materials into soulful decor. The roadmap guiding the studio puts sustainability,
             craftsmanship and digital storytelling at the heart of every decision.
         </p>
+        <?php if ($aboutMediaUrl): ?>
+            <div class="about-media-block">
+                <figure>
+                    <img src="<?php echo e($aboutMediaUrl); ?>" alt="Creations JY studio" loading="lazy">
+                </figure>
+                <p class="about-media-caption">
+                    Creations JY studio portrait/logo managed via the admin settings.
+                </p>
+            </div>
+        <?php endif; ?>
         <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin: 1.5rem 0;">
             <article style="background-color: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 12px 32px rgba(0,0,0,0.06);">
                 <h3 style="margin-top: 0;">Gruyère workshop</h3>
@@ -76,4 +88,3 @@ include __DIR__ . '/../includes/header.php';
 </section>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
-

@@ -25,17 +25,21 @@ $stmt = $pdo->query("
 ");
 $featuredProducts = $stmt->fetchAll();
 
+$heroTitle = getSiteSetting('hero_title_en', 'Give a Second Life to Your Objects');
+$heroSubtitle = getSiteSetting('hero_subtitle_en', 'Unique creations made from recycled materials by Yasemin Jemmely in Gruyère, Switzerland.');
+$heroCta = getSiteSetting('hero_cta_en', 'Explore Creations');
+
 include __DIR__ . '/../includes/header.php';
 ?>
 
 <section class="hero">
     <div class="container">
-        <h1 class="hero-title">Give a Second Life to Your Objects</h1>
+        <h1 class="hero-title"><?php echo e($heroTitle); ?></h1>
         <p class="hero-subtitle">
-            Unique creations made from recycled materials by Yasemin Jemmely in Gruyère, Switzerland.
+            <?php echo e($heroSubtitle); ?>
         </p>
         <a href="/en/products.php" class="btn-primary">
-            Explore Creations
+            <?php echo e($heroCta); ?>
         </a>
     </div>
 </section>
@@ -172,4 +176,3 @@ include __DIR__ . '/../includes/header.php';
 </section>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
-

@@ -6,6 +6,11 @@ requireAdmin();
 
 global $pdo;
 
+$brandTagline = getSiteSetting('brand_tagline_en', 'Upcycling studio in Gruyère · Unique and sustainable decor.');
+$siteName = getSiteSetting('site_name_en', 'Creations JY');
+$whatsAppNumber = getWhatsAppNumber();
+$whatsAppLinkBase = 'https://wa.me/' . preg_replace('/\D+/', '', $whatsAppNumber);
+
 // Basic stats
 $counts = [
     'total_products' => 0,
@@ -13,6 +18,8 @@ $counts = [
     'sold' => 0,
     'reserved' => 0,
     'inquiries' => 0,
+    'wp_today' => 0,
+    'wp_week' => 0,
 ];
 
 $stmt = $pdo->query("SELECT COUNT(*) AS c FROM products");
@@ -23,8 +30,9 @@ foreach ($statusStmt as $row) {
     $counts[$row['status']] = (int) $row['c'];
 }
 
-$inqStmt = $pdo->query("SELECT COUNT(*) AS c FROM whatsapp_inquiries");
-$counts['inquiries'] = (int) $inqStmt->fetchColumn();
+$counts['inquiries'] = (int) $pdo->query("SELECT COUNT(*) FROM whatsapp_inquiries")->fetchColumn();
+$counts['wp_today'] = (int) $pdo->query("SELECT COUNT(*) FROM whatsapp_inquiries WHERE DATE(inquiry_date) = CURDATE()")->fetchColumn();
+$counts['wp_week'] = (int) $pdo->query("SELECT COUNT(*) FROM whatsapp_inquiries WHERE inquiry_date >= DATE_SUB(NOW(), INTERVAL 7 DAY)")->fetchColumn();
 
 // Recent inquiries
 $recentInquiries = $pdo->query("
@@ -34,7 +42,7 @@ $recentInquiries = $pdo->query("
     LEFT JOIN product_translations pt 
       ON p.id = pt.product_id AND pt.language_code = 'fr'
     ORDER BY wi.inquiry_date DESC
-    LIMIT 10
+    LIMIT 8
 ")->fetchAll();
 
 // Top viewed products
@@ -53,7 +61,7 @@ $recentActivities = $pdo->query("
     FROM activity_logs al
     LEFT JOIN admin_users au ON al.admin_id = au.id
     ORDER BY al.created_at DESC
-    LIMIT 10
+    LIMIT 8
 ")->fetchAll();
 ?>
 <!DOCTYPE html>
@@ -67,7 +75,7 @@ $recentActivities = $pdo->query("
 <body>
     <header class="site-header">
         <div class="site-header-inner container">
-            <strong>Creations JY · Admin</strong>
+            <strong><?php echo e($siteName); ?> · Ops</strong>
             <nav class="site-nav">
                 <a href="/admin/index.php">Dashboard</a>
                 <a href="/admin/products/index.php">Products</a>
@@ -78,101 +86,131 @@ $recentActivities = $pdo->query("
         </div>
     </header>
     <main>
-        <section class="section">
+        <section class="section dashboard-section">
             <div class="container">
-                <h1 class="section-title">Dashboard</h1>
-                <div class="product-grid" style="margin-top: 1.5rem;">
-                    <div class="product-card">
-                        <div class="container" style="padding: 1.25rem;">
-                            <h2>Total products</h2>
-                            <p style="font-size: 2rem;"><?php echo $counts['total_products']; ?></p>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="container" style="padding: 1.25rem;">
-                            <h2>Available</h2>
-                            <p style="font-size: 2rem;"><?php echo $counts['available']; ?></p>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="container" style="padding: 1.25rem;">
-                            <h2>Sold</h2>
-                            <p style="font-size: 2rem;"><?php echo $counts['sold']; ?></p>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="container" style="padding: 1.25rem;">
-                            <h2>Reserved</h2>
-                            <p style="font-size: 2rem;"><?php echo $counts['reserved']; ?></p>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <div class="container" style="padding: 1.25rem;">
-                            <h2>WhatsApp inquiries</h2>
-                            <p style="font-size: 2rem;"><?php echo $counts['inquiries']; ?></p>
-                        </div>
+                <div class="dashboard-hero">
+                    <p class="eyebrow">Creations JY studio</p>
+                    <h1>Welcome back, <?php echo e(currentAdmin()['full_name'] ?? 'admin'); ?>.</h1>
+                    <p><?php echo e($brandTagline); ?></p>
+                    <div class="hero-actions">
+                        <a class="btn-primary" href="/admin/products/create.php">+ Add new product</a>
+                        <a class="btn-secondary" href="/" target="_blank" rel="noopener">View storefront</a>
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; margin-top: 2rem;">
-                    <div>
-                        <h2>Recent WhatsApp inquiries</h2>
+                <div class="stats-grid">
+                    <article class="stat-card">
+                        <p class="stat-label">Total products</p>
+                        <p class="stat-value"><?php echo (int) $counts['total_products']; ?></p>
+                    </article>
+                    <article class="stat-card" data-status="available">
+                        <p class="stat-label">Available</p>
+                        <p class="stat-value"><?php echo (int) $counts['available']; ?></p>
+                    </article>
+                    <article class="stat-card" data-status="reserved">
+                        <p class="stat-label">Reserved</p>
+                        <p class="stat-value"><?php echo (int) $counts['reserved']; ?></p>
+                    </article>
+                    <article class="stat-card" data-status="sold">
+                        <p class="stat-label">Sold</p>
+                        <p class="stat-value"><?php echo (int) $counts['sold']; ?></p>
+                    </article>
+                    <article class="stat-card" data-status="whatsapp">
+                        <p class="stat-label">WP requests (7d)</p>
+                        <p class="stat-value"><?php echo (int) $counts['wp_week']; ?></p>
+                        <small><?php echo (int) $counts['wp_today']; ?> today · <?php echo (int) $counts['inquiries']; ?> total</small>
+                    </article>
+                </div>
+
+                <div class="dashboard-grid">
+                    <section class="insight-card">
+                        <div class="insight-card-header">
+                            <div>
+                                <h2>WhatsApp pipeline</h2>
+                                <p>Latest leads coming through WP.</p>
+                            </div>
+                            <span class="badge-light"><?php echo (int) $counts['wp_today']; ?> today</span>
+                        </div>
                         <?php if ($recentInquiries): ?>
-                            <ul>
+                            <div class="wp-feed">
                                 <?php foreach ($recentInquiries as $inq): ?>
-                                    <li>
-                                        <?php echo e($inq['inquiry_date']); ?> ·
-                                        <?php echo e($inq['title'] ?: 'Unknown product'); ?>
-                                    </li>
+                                    <article class="wp-card">
+                                        <div class="wp-card-header">
+                                            <strong><?php echo e($inq['customer_name'] ?: 'WhatsApp lead'); ?></strong>
+                                            <span><?php echo e(date('d M H:i', strtotime($inq['inquiry_date']))); ?></span>
+                                        </div>
+                                        <p class="wp-product"><?php echo e($inq['title'] ?: 'Unknown product'); ?></p>
+                                        <?php if (!empty($inq['message'])): ?>
+                                            <p class="wp-message">
+                                                “<?php echo e(mb_strimwidth($inq['message'], 0, 140, '…', 'UTF-8')); ?>”
+                                            </p>
+                                        <?php endif; ?>
+                                        <div class="wp-card-footer">
+                                            <a class="btn-outline" href="<?php echo e($whatsAppLinkBase); ?>" target="_blank" rel="noopener">Open chat</a>
+                                            <?php if (!empty($inq['product_id'])): ?>
+                                                <a class="ghost-link" href="/admin/products/edit.php?id=<?php echo (int) $inq['product_id']; ?>">Product sheet</a>
+                                            <?php endif; ?>
+                                        </div>
+                                    </article>
                                 <?php endforeach; ?>
-                            </ul>
+                            </div>
                         <?php else: ?>
-                            <p>No inquiries yet.</p>
+                            <p class="empty-state">No WhatsApp requests recorded yet.</p>
                         <?php endif; ?>
-                    </div>
-                    <div>
-                        <h2>Most viewed products</h2>
+                    </section>
+
+                    <section class="insight-card">
+                        <div class="insight-card-header">
+                            <h2>Most viewed products</h2>
+                            <p>Based on view counter from the storefront.</p>
+                        </div>
                         <?php if ($topProducts): ?>
-                            <ul>
+                            <ul class="simple-list">
                                 <?php foreach ($topProducts as $p): ?>
                                     <li>
-                                        <?php echo e($p['title']); ?> · <?php echo (int) $p['view_count']; ?> views
+                                        <div>
+                                            <strong><?php echo e($p['title']); ?></strong>
+                                            <span><?php echo (int) $p['view_count']; ?> views</span>
+                                        </div>
+                                        <a href="/admin/products/edit.php?id=<?php echo (int) $p['id']; ?>" class="ghost-link">Edit</a>
                                     </li>
                                 <?php endforeach; ?>
                             </ul>
                         <?php else: ?>
-                            <p>No products yet.</p>
+                            <p class="empty-state">No product activity yet.</p>
                         <?php endif; ?>
-                    </div>
-                    <div>
-                        <h2>Recent Activity</h2>
+                    </section>
+
+                    <section class="insight-card">
+                        <div class="insight-card-header">
+                            <h2>Recent activity</h2>
+                            <p>Last updates performed by the team.</p>
+                        </div>
                         <?php if ($recentActivities): ?>
-                            <ul style="list-style: none; padding: 0;">
+                            <ul class="activity-list">
                                 <?php foreach ($recentActivities as $activity): ?>
-                                    <li style="padding: 0.5rem 0; border-bottom: 1px solid #E8E4DD;">
-                                        <strong><?php echo e($activity['action']); ?></strong>
-                                        <?php if ($activity['username']): ?>
-                                            <span style="color: #8B7F7F;">by <?php echo e($activity['username']); ?></span>
-                                        <?php endif; ?>
-                                        <br>
-                                        <small style="color: #8B7F7F;">
-                                            <?php echo e($activity['created_at']); ?>
+                                    <li>
+                                        <div>
+                                            <strong><?php echo e($activity['action']); ?></strong>
+                                            <span><?php echo e($activity['username'] ?? 'System'); ?></span>
+                                        </div>
+                                        <p>
+                                            <?php echo e(date('d M H:i', strtotime($activity['created_at']))); ?>
                                             <?php if ($activity['details']): ?>
-                                                · <?php echo e(mb_substr($activity['details'], 0, 60, 'UTF-8')); ?>
+                                                · <?php echo e(mb_strimwidth($activity['details'], 0, 80, '…', 'UTF-8')); ?>
                                             <?php endif; ?>
-                                        </small>
+                                        </p>
                                     </li>
                                 <?php endforeach; ?>
                             </ul>
                         <?php else: ?>
-                            <p>No activity yet.</p>
+                            <p class="empty-state">No admin actions logged yet.</p>
                         <?php endif; ?>
-                    </div>
+                    </section>
                 </div>
             </div>
         </section>
     </main>
 </body>
 </html>
-
 

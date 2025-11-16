@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/language.php';
+require_once __DIR__ . '/functions.php';
 require_once __DIR__ . '/db.php';
 
 /**
@@ -36,7 +37,7 @@ function getProductById(int $productId): ?array
  */
 function getWhatsAppLink(?int $productId = null, string $customMessage = '', ?string $customerName = null): string
 {
-    $phone = str_replace(['+', ' ', '-'], '', WHATSAPP_NUMBER);
+    $phone = str_replace(['+', ' ', '-'], '', getWhatsAppNumber());
     $lang = getCurrentLanguage();
 
     $message = $lang === 'fr' 
@@ -69,5 +70,4 @@ function getWhatsAppLink(?int $productId = null, string $customMessage = '', ?st
 
     return 'https://wa.me/' . $phone . '?text=' . urlencode($message);
 }
-
 

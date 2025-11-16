@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }).catch(function() {});
             
             // Build WhatsApp link
-            var phone = '<?php echo str_replace(['+', ' ', '-'], '', WHATSAPP_NUMBER); ?>';
+            var phone = '<?php echo e(str_replace(['+', ' ', '-'], '', getWhatsAppNumber())); ?>';
             var lang = 'fr';
             var productTitle = <?php echo json_encode($product['title']); ?>;
             var productUrl = '<?php echo rtrim(SITE_URL, '/'); ?>/fr/produit/<?php echo e($product['slug'] ?? $product['id']); ?>';
@@ -224,5 +224,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
-
 
