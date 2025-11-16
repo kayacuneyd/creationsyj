@@ -31,6 +31,7 @@ $defaults = [
     'instagram_url' => 'https://instagram.com/creationsjy',
     'whatsapp_number' => WHATSAPP_NUMBER,
     'about_media_url' => '/assets/images/placeholder.jpg',
+    'site_logo_url' => '',
 ];
 $settings = array_merge($defaults, $settings);
 
@@ -53,6 +54,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $instagramUrl = trim($_POST['instagram_url'] ?? '');
         $whatsAppNumber = trim($_POST['whatsapp_number'] ?? '');
         $aboutMediaUrl = trim($_POST['about_media_url'] ?? '');
+        $siteLogoUrl = trim($_POST['site_logo_url'] ?? '');
+        $siteLogoFile = $_FILES['site_logo_file'] ?? null;
+        $aboutMediaFile = $_FILES['about_media_file'] ?? null;
 
         if ($siteNameFr === '' || $siteNameEn === '') {
             $errors[] = 'Site names cannot be empty.';
@@ -98,11 +102,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        if ($aboutMediaUrl !== '') {
+        $uploadDir = __DIR__ . '/../../uploads/settings/';
+        if (!is_dir($uploadDir)) {
+            if (!mkdir($uploadDir, 0775, true) && !is_dir($uploadDir)) {
+                $errors[] = 'Unable to create uploads directory.';
+            }
+        }
+
+        $uploadedPaths = [];
+
+        $allowedMime = ['image/jpeg', 'image/png', 'image/webp'];
+        $maxSize = 2 * 1024 * 1024;
+
+        if ($siteLogoFile && $siteLogoFile['error'] === UPLOAD_ERR_OK) {
+            if (!in_array($siteLogoFile['type'], $allowedMime, true)) {
+                $errors[] = 'Logo must be a JPG, PNG or WebP file.';
+            } elseif ($siteLogoFile['size'] > $maxSize) {
+                $errors[] = 'Logo must be under 2MB.';
+            } else {
+                $extension = pathinfo($siteLogoFile['name'], PATHINFO_EXTENSION);
+                $filename = 'logo_' . time() . '.' . $extension;
+                $destination = $uploadDir . $filename;
+                if (move_uploaded_file($siteLogoFile['tmp_name'], $destination)) {
+                    $uploadedPaths['site_logo_url'] = '/uploads/settings/' . $filename;
+                } else {
+                    $errors[] = 'Unable to upload logo.';
+                }
+            }
+        }
+
+        if ($aboutMediaFile && $aboutMediaFile['error'] === UPLOAD_ERR_OK) {
+            if (!in_array($aboutMediaFile['type'], $allowedMime, true)) {
+                $errors[] = 'Media must be a JPG, PNG or WebP file.';
+            } elseif ($aboutMediaFile['size'] > $maxSize) {
+                $errors[] = 'Media must be under 2MB.';
+            } else {
+                $extension = pathinfo($aboutMediaFile['name'], PATHINFO_EXTENSION);
+                $filename = 'about_' . time() . '.' . $extension;
+                $destination = $uploadDir . $filename;
+                if (move_uploaded_file($aboutMediaFile['tmp_name'], $destination)) {
+                    $uploadedPaths['about_media_url'] = '/uploads/settings/' . $filename;
+                } else {
+                    $errors[] = 'Unable to upload media.';
+                }
+            }
+        }
+
+        if ($aboutMediaUrl !== '' && empty($uploadedPaths['about_media_url'])) {
             $isAbsolute = filter_var($aboutMediaUrl, FILTER_VALIDATE_URL);
             $isRelative = str_starts_with($aboutMediaUrl, '/');
             if (!$isAbsolute && !$isRelative) {
                 $errors[] = 'About media URL must be an absolute URL or start with /.';
+            }
+        }
+
+        if ($siteLogoUrl !== '' && empty($uploadedPaths['site_logo_url'])) {
+            $isAbsolute = filter_var($siteLogoUrl, FILTER_VALIDATE_URL);
+            $isRelative = str_starts_with($siteLogoUrl, '/');
+            if (!$isAbsolute && !$isRelative) {
+                $errors[] = 'Logo URL must be an absolute URL or start with /.';
             }
         }
 
@@ -121,7 +179,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'contact_email' => $contactEmail,
                 'instagram_url' => $instagramUrl,
                 'whatsapp_number' => $whatsAppNumber,
-                'about_media_url' => $aboutMediaUrl,
+                'about_media_url' => $uploadedPaths['about_media_url'] ?? $aboutMediaUrl,
+                'site_logo_url' => $uploadedPaths['site_logo_url'] ?? $siteLogoUrl,
             ];
 
             $stmtUp = $pdo->prepare('
@@ -185,7 +244,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </ul>
                 <?php endif; ?>
 
-                <form method="post" class="settings-form">
+                <form method="post" class="settings-form" enctype="multipart/form-data">
                     <input type="hidden" name="csrf_token" value="<?php echo e(generateCSRFToken()); ?>">
 
                     <div class="settings-panel">
@@ -273,18 +332,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <h2>About page media</h2>
                             <p>Add a portrait or logo showcased on the About pages.</p>
                         </div>
-                        <div class="settings-grid">
-                            <div>
-                                <label for="about_media_url">Media URL</label>
-                                <input id="about_media_url" name="about_media_url" type="text" class="input" value="<?php echo e($settings['about_media_url']); ?>">
-                                <small>Accepts absolute URLs or paths like /uploads/about/atelier.jpg.</small>
-                            </div>
+                <div class="settings-grid">
+                    <div>
+                        <label for="about_media_file">Upload media</label>
+                        <input id="about_media_file" name="about_media_file" type="file" class="input" accept="image/*">
+                        <small>Upload JPG, PNG ou WebP (max 2&nbsp;MB).</small>
+                    </div>
+                    <div>
+                        <label for="about_media_url">Media URL</label>
+                        <input id="about_media_url" name="about_media_url" type="text" class="input" value="<?php echo e($settings['about_media_url']); ?>">
+                        <small>Optional: provide a direct URL instead of uploading.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-panel">
+                <div class="settings-panel-header">
+                    <h2>Site logo</h2>
+                    <p>Upload a logo for the navigation bar. Falls back to the site name if empty.</p>
+                </div>
+                <div class="settings-grid">
+                    <div>
+                        <label for="site_logo_file">Upload logo</label>
+                        <input id="site_logo_file" name="site_logo_file" type="file" class="input" accept="image/*">
+                        <small>Recommended height 42px, formats JPG/PNG/WebP.</small>
+                    </div>
+                    <div>
+                        <label for="site_logo_url">Logo URL</label>
+                        <input id="site_logo_url" name="site_logo_url" type="text" class="input" value="<?php echo e($settings['site_logo_url']); ?>">
+                        <small>Optional direct link.</small>
+                    </div>
+                </div>
+                <?php if (!empty($settings['site_logo_url'])): ?>
+                    <div style="margin-top: 1rem;">
+                        <small>Logo actuel :</small>
+                        <div style="margin-top: 0.5rem;">
+                            <img src="<?php echo e($settings['site_logo_url']); ?>" alt="Logo" style="max-height: 60px;">
                         </div>
                     </div>
+                <?php endif; ?>
+            </div>
 
-                    <button type="submit" class="btn-primary">
-                        Save settings
-                    </button>
+            <button type="submit" class="btn-primary">
+                Save settings
+            </button>
                 </form>
             </div>
         </section>

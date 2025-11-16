@@ -18,7 +18,7 @@ define('DB_USER', getenv('DB_USER') ?: 'u629681856_creationsjy');
 define('DB_PASS', getenv('DB_PASS') ?: 'Beykoz1453!');
 
 // Site configuration
-define('SITE_URL', getenv('SITE_URL') ?: 'https://creationsjy.test');
+define('SITE_URL', getenv('SITE_URL') ?: 'https://creationsjy.com');
 define('DEFAULT_LANG', 'fr');
 
 // Admin signup security token

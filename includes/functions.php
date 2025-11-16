@@ -145,6 +145,15 @@ function getWhatsAppNumber(): string
 }
 
 /**
+ * Get the current logo URL, fallback to site name text.
+ */
+function getSiteLogoUrl(): ?string
+{
+    $logo = getSiteSetting('site_logo_url');
+    return $logo !== null && trim($logo) !== '' ? $logo : null;
+}
+
+/**
  * Get client IP address.
  */
 function getClientIp(): string

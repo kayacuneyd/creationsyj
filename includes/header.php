@@ -34,9 +34,13 @@ $langUrls = [
 <body>
     <header class="site-header">
         <div class="site-header-inner container">
-            <div>
+            <div class="site-logo">
                 <a href="<?php echo $currentLang === 'fr' ? '/fr/' : '/en/'; ?>">
-                    <strong><?php echo e($siteName); ?></strong>
+                    <?php if ($logoUrl = getSiteLogoUrl()): ?>
+                        <img src="<?php echo e($logoUrl); ?>" alt="<?php echo e($siteName); ?>" loading="lazy">
+                    <?php else: ?>
+                        <strong><?php echo e($siteName); ?></strong>
+                    <?php endif; ?>
                 </a>
             </div>
             <button class="nav-toggle" type="button" aria-label="Toggle navigation" data-nav-toggle>

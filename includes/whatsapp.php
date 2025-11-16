@@ -37,12 +37,16 @@ function getProductById(int $productId): ?array
  */
 function getWhatsAppLink(?int $productId = null, string $customMessage = '', ?string $customerName = null): string
 {
+    global $pdo;
+
     $phone = str_replace(['+', ' ', '-'], '', getWhatsAppNumber());
     $lang = getCurrentLanguage();
+    $siteName = getSiteSetting($lang === 'fr' ? 'site_name_fr' : 'site_name_en', 'Creations JY');
 
     $message = $lang === 'fr' 
         ? "Bonjour, je suis intéressé(e) par vos créations."
         : "Hello, I'm interested in your creations.";
+    $attachment = '';
 
     if ($customerName) {
         $message = ($lang === 'fr' ? 'Bonjour, je m\'appelle ' : 'Hello, my name is ') . $customerName . '. ';
@@ -61,6 +65,13 @@ function getWhatsAppLink(?int $productId = null, string $customMessage = '', ?st
                 ? 'Bonjour' . ($customerName ? ', je m\'appelle ' . $customerName : '') . ', je suis intéressé(e) par ce produit: ' 
                 : 'Hello' . ($customerName ? ', my name is ' . $customerName : '') . ', I\'m interested in this product: ') 
                 . $product['title'] . ' - ' . $productUrl;
+
+            $imageStmt = $pdo->prepare('SELECT filename FROM product_images WHERE product_id = :id ORDER BY is_primary DESC, display_order ASC LIMIT 1');
+            $imageStmt->execute(['id' => $productId]);
+            $image = $imageStmt->fetchColumn();
+            if ($image) {
+                $attachment = "\n\n" . ($lang === 'fr' ? 'Images' : 'Images') . ' · ' . rtrim(SITE_URL, '/') . '/uploads/products/medium/' . $image;
+            }
         }
     }
 
@@ -68,6 +79,5 @@ function getWhatsAppLink(?int $productId = null, string $customMessage = '', ?st
         $message .= "\n\n" . $customMessage;
     }
 
-    return 'https://wa.me/' . $phone . '?text=' . urlencode($message);
+    return 'https://wa.me/' . $phone . '?text=' . urlencode($message . $attachment);
 }
-

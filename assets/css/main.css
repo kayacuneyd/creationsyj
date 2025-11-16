@@ -135,6 +135,12 @@ a:hover {
     position: relative;
 }
 
+.site-logo img {
+    max-height: 42px;
+    width: auto;
+    display: block;
+}
+
 .site-nav {
     display: flex;
     gap: 1rem;
