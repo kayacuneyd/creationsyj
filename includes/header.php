@@ -43,12 +43,12 @@ $langUrls = [
                     <?php endif; ?>
                 </a>
             </div>
-            <button class="nav-toggle" type="button" aria-label="Toggle navigation" data-nav-toggle>
+            <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-navigation" data-nav-toggle>
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
-            <nav class="site-nav" data-nav-menu>
+            <nav class="site-nav" id="primary-navigation" data-nav-menu>
                 <a href="<?php echo $currentLang === 'fr' ? '/fr/' : '/en/'; ?>"><?php echo e(t('home')); ?></a>
                 <a href="<?php echo $currentLang === 'fr' ? '/fr/a-propos.php' : '/en/about.php'; ?>"><?php echo e(t('about')); ?></a>
                 <a href="<?php echo $currentLang === 'fr' ? '/fr/produits.php' : '/en/products.php'; ?>"><?php echo e(t('products')); ?></a>

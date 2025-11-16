@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
+    function forEachNode(list, callback) {
+        if (!list || !callback) {
+            return;
+        }
+        Array.prototype.forEach.call(list, callback);
+    }
+
     // Basic mobile nav toggle (if needed later)
     var navToggle = document.querySelector('[data-nav-toggle]');
     var navMenu = document.querySelector('[data-nav-menu]');
@@ -10,15 +17,22 @@ document.addEventListener('DOMContentLoaded', function () {
             navMenu.classList.remove('is-open');
             navToggle.classList.remove('active');
             document.body.classList.remove('nav-open');
+            navToggle.setAttribute('aria-expanded', 'false');
         }
 
         navToggle.addEventListener('click', function () {
-            var isOpen = navMenu.classList.toggle('is-open');
-            navToggle.classList.toggle('active', isOpen);
-            document.body.classList.toggle('nav-open', isOpen);
+            var isOpen = navMenu.classList.contains('is-open');
+            if (isOpen) {
+                closeNav();
+            } else {
+                navMenu.classList.add('is-open');
+                navToggle.classList.add('active');
+                document.body.classList.add('nav-open');
+                navToggle.setAttribute('aria-expanded', 'true');
+            }
         });
 
-        navLinks.forEach(function (link) {
+        forEachNode(navLinks, function (link) {
             link.addEventListener('click', closeNav);
         });
 
@@ -36,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (searchInput && productCards.length) {
         searchInput.addEventListener('input', function () {
             var term = searchInput.value.toLowerCase();
-            productCards.forEach(function (card) {
+            forEachNode(productCards, function (card) {
                 var title = card.getAttribute('data-title') || '';
                 if (title.toLowerCase().indexOf(term) !== -1) {
                     card.style.display = '';
@@ -58,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (lightbox && galleryImages.length > 0) {
         // Collect all image sources (JPEG and WebP)
-        galleryImages.forEach(function (img) {
+        forEachNode(galleryImages, function (img) {
             var jpegSrc = img.getAttribute('data-full-image') || img.src;
             imageSources.push(jpegSrc);
             
@@ -72,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         // Open lightbox on image click
-        galleryImages.forEach(function (img, index) {
+        forEachNode(galleryImages, function (img, index) {
             img.addEventListener('click', function () {
                 currentImageIndex = index;
                 openLightbox();
@@ -192,4 +206,3 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
-
