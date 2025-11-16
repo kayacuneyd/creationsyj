@@ -20,7 +20,7 @@ define('DB_PASS', getenv('DB_PASS') ?: 'Beykoz1453!');
 // Site configuration
 define('SITE_URL', getenv('SITE_URL') ?: 'https://creationsjy.test');
 define('DEFAULT_LANG', 'fr');
-define('ADMIN_SIGNUP_TOKEN', getenv('ADMIN_SIGNUP_TOKEN') ?: '');
+define('ADMIN_SIGNUP_TOKEN', getenv('ADMIN_SIGNUP_TOKEN') ?: 'Beykoz1453!');
 
 // WhatsApp configuration
 define('WHATSAPP_NUMBER', getenv('WHATSAPP_NUMBER') ?: '+41XXXXXXXXX'); // Yasemin's WhatsApp Business number
