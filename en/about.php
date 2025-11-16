@@ -14,9 +14,8 @@ include __DIR__ . '/../includes/header.php';
     <div class="container">
         <h1 class="section-title">About Creations JY</h1>
         <p>
-            Creations JY is the world of Yasemin Jemmely, a maker from Gruyère who transforms forgotten, antique
-            and second-hand materials into soulful decor. The roadmap guiding the studio puts sustainability,
-            craftsmanship and digital storytelling at the heart of every decision.
+            Creations JY is a boutique upcycling studio founded by Yasemin Jemmely in Gruyère. We turn archival fabrics, antique furniture and forgotten décor into contemporary statements that elevate interiors with a conscience.
+            The collection bridges editorial aesthetics and sustainable production so every piece feels rare, tactile and intentional.
         </p>
         <?php if ($aboutMediaUrl): ?>
             <div class="about-media-block">
@@ -24,65 +23,55 @@ include __DIR__ . '/../includes/header.php';
                     <img src="<?php echo e($aboutMediaUrl); ?>" alt="Creations JY studio" loading="lazy">
                 </figure>
                 <p class="about-media-caption">
-                    Creations JY studio portrait/logo managed via the admin settings.
+                    Inside the Gruyère studio where heritage materials meet modern styling.
                 </p>
             </div>
         <?php endif; ?>
         <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin: 1.5rem 0;">
             <article style="background-color: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 12px 32px rgba(0,0,0,0.06);">
-                <h3 style="margin-top: 0;">Gruyère workshop</h3>
+                <h3 style="margin-top: 0;">Our ethos</h3>
                 <p style="color: #8B7F7F; margin-bottom: 0;">
-                    Between mountains and lakes, Yasemin hand-builds limited series and custom orders.
-                    Visits are possible on request to see pieces in real life or co-design a brief.
+                    Preserve character, minimise waste and craft décor that sparks conversation in homes, hotels and retail spaces.
                 </p>
             </article>
             <article style="background-color: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 12px 32px rgba(0,0,0,0.06);">
-                <h3 style="margin-top: 0;">Visual signature</h3>
+                <h3 style="margin-top: 0;">Experience</h3>
                 <p style="color: #8B7F7F; margin-bottom: 0;">
-                    A dusty-rose, cream and warm-grey palette frames each shoot and reinforces the
-                    vintage yet elevated positioning described in the roadmap.
+                    Editorial photography, transparent descriptions and instant WhatsApp conversations create a high-touch digital journey.
+                </p>
+            </article>
+            <article style="background-color: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 12px 32px rgba(0,0,0,0.06);">
+                <h3 style="margin-top: 0;">Service</h3>
+                <p style="color: #8B7F7F; margin-bottom: 0;">
+                    From sourcing to delivery we remain your single point of contact, ensuring projects stay on-brand and on-time.
                 </p>
             </article>
         </div>
-        <h2 style="margin-top: 1.5rem;">Sustainable manifesto</h2>
-        <ul style="color: #8B7F7F; padding-left: 1.25rem;">
-            <li>Re-use and elevate existing materials instead of producing new stock.</li>
-            <li>Document every piece with transparent statuses (available, reserved, sold).</li>
-            <li>Keep conversations human through the WhatsApp Business flow.</li>
-        </ul>
-        <h2 style="margin-top: 1.5rem;">Creative process</h2>
-        <p>
-            Following the roadmap, each object goes through sourcing, artisan assembly and thoughtful styling
-            before it reaches the online gallery or a collector's home.
-        </p>
+        <h2 style="margin-top: 1.5rem;">How we build each piece</h2>
         <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin: 1rem 0 1.5rem;">
             <article style="background-color: var(--off-white); border-radius: 0.75rem; padding: 1.25rem;">
-                <h3 style="margin-top: 0;">Sourcing</h3>
-                <p style="color: #8B7F7F; margin-bottom: 0;">Second-hand, antique or unused pieces are grouped into curated sets.</p>
+                <h3 style="margin-top: 0;">1. Curated sourcing</h3>
+                <p style="color: #8B7F7F; margin-bottom: 0;">Antique markets and collectors supply raw materials catalogued like a fashion archive.</p>
             </article>
             <article style="background-color: var(--off-white); border-radius: 0.75rem; padding: 1.25rem;">
-                <h3 style="margin-top: 0;">Artisan build</h3>
-                <p style="color: #8B7F7F; margin-bottom: 0;">Mixed techniques respect the patina while ensuring durability.</p>
+                <h3 style="margin-top: 0;">2. Artisanal transformation</h3>
+                <p style="color: #8B7F7F; margin-bottom: 0;">Mixed media restoration blends carpentry, textile work and gilding to protect the original charm.</p>
             </article>
             <article style="background-color: var(--off-white); border-radius: 0.75rem; padding: 1.25rem;">
-                <h3 style="margin-top: 0;">Story-driven styling</h3>
-                <p style="color: #8B7F7F; margin-bottom: 0;">Soft textures and shabby-chic accents tie each collection together.</p>
+                <h3 style="margin-top: 0;">3. Digital storytelling</h3>
+                <p style="color: #8B7F7F; margin-bottom: 0;">Every item is measured, styled and published so you can source remotely with showroom-level detail.</p>
             </article>
         </div>
-        <h2 style="margin-top: 1.5rem;">Services</h2>
+        <h2 style="margin-top: 1.5rem;">What we offer</h2>
         <ul style="color: #8B7F7F; padding-left: 1.25rem;">
-            <li>Ready-to-adopt creations with photos, materials and measurements.</li>
-            <li>Custom commissions for homes, boutiques, events or corporate gifting.</li>
-            <li>Styling advice for blending upcycled pieces into contemporary spaces.</li>
+            <li>Weekly drops of ready-to-adopt décor</li>
+            <li>Bespoke commissions for hospitality, retail and editorial sets</li>
+            <li>Short-term rentals for photo shoots and pop-ups</li>
+            <li>Consulting to integrate upcycled statement pieces into brand environments</li>
         </ul>
-        <h2 style="margin-top: 1.5rem;">Digital experience</h2>
+        <h2 style="margin-top: 1.5rem;">Let’s collaborate</h2>
         <p>
-            The platform is crafted with HTML5, Tailwind CSS, vanilla JS, PHP&nbsp;8 and MySQL to remain lightweight and secure.
-            WhatsApp Business integration supports messaging-based sales, while a mobile-first layout serves the 70%+
-            smartphone audience outlined in the roadmap.
-        </p>
-        <p>
-            Wherever you are in Switzerland or Europe, you can reach Yasemin in a few taps and co-create your next signature piece.
+            We operate bilingually in French and English and deliver throughout Switzerland and across Europe. Message us on WhatsApp or via the contact page—together we will craft the next storyworthy object for your project.
         </p>
     </div>
 </section>

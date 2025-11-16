@@ -39,12 +39,17 @@ $langUrls = [
                     <strong><?php echo e($siteName); ?></strong>
                 </a>
             </div>
+            <button class="nav-toggle" type="button" aria-label="Toggle navigation" data-nav-toggle>
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <nav class="site-nav" data-nav-menu>
                 <a href="<?php echo $currentLang === 'fr' ? '/fr/' : '/en/'; ?>"><?php echo e(t('home')); ?></a>
                 <a href="<?php echo $currentLang === 'fr' ? '/fr/a-propos.php' : '/en/about.php'; ?>"><?php echo e(t('about')); ?></a>
                 <a href="<?php echo $currentLang === 'fr' ? '/fr/produits.php' : '/en/products.php'; ?>"><?php echo e(t('products')); ?></a>
                 <a href="<?php echo $currentLang === 'fr' ? '/fr/contact.php' : '/en/contact.php'; ?>"><?php echo e(t('contact')); ?></a>
-                <span style="margin: 0 0.5rem; color: #8B7F7F;">|</span>
+                <span class="nav-divider" aria-hidden="true">|</span>
                 <?php
                 $otherLang = $currentLang === 'fr' ? 'en' : 'fr';
                 $currentPath = getCurrentPath();
@@ -58,4 +63,3 @@ $langUrls = [
         </div>
     </header>
     <main>
-

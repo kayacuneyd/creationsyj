@@ -60,8 +60,8 @@ include __DIR__ . '/../includes/header.php';
     <div class="container">
         <h1 class="section-title">Contact</h1>
         <p>
-            Vous avez une question sur une création, un projet sur mesure ou une collaboration ?
-            Laissez un message à Yasemin via ce formulaire ou contactez-la directement par WhatsApp.
+            Vous souhaitez réserver une pièce, lancer une commande sur-mesure ou intégrer l’upcycling dans un projet professionnel ?
+            Partagez vos besoins via ce formulaire et nous vous répondrons sous 24h ouvrées. Pour un échange immédiat, passez directement par WhatsApp.
         </p>
 
         <?php if ($success): ?>
@@ -107,5 +107,4 @@ include __DIR__ . '/../includes/header.php';
 </section>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
-
 

@@ -46,27 +46,24 @@ include __DIR__ . '/../includes/header.php';
 
 <section class="section" style="background-color: var(--off-white);">
     <div class="container">
-        <h2 class="section-title">The Creations JY Promise</h2>
+        <h2 class="section-title">Why interiors with soul trust Creations JY</h2>
         <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
             <article style="background-color: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);">
-                <h3 style="margin-top: 0;">High-end upcycling</h3>
+                <h3 style="margin-top: 0;">Curated sourcing</h3>
                 <p style="color: #8B7F7F; margin-bottom: 0;">
-                    Second-hand, antique and forgotten materials are sourced with care, then recomposed
-                    into one-of-a-kind decorative pieces that feel timeless.
+                    Materials are handpicked across Switzerland, restored in Gruyère and matched to highlight their patina.
                 </p>
             </article>
             <article style="background-color: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);">
-                <h3 style="margin-top: 0;">WhatsApp powered ordering</h3>
+                <h3 style="margin-top: 0;">Retail-grade storytelling</h3>
                 <p style="color: #8B7F7F; margin-bottom: 0;">
-                    The website acts as a refined showroom. When you are ready, WhatsApp Business picks up the conversation
-                    for quotes, extra photos and the final order.
+                    Product sheets share measurements, textures and availability so you can order confidently from your phone.
                 </p>
             </article>
             <article style="background-color: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);">
-                <h3 style="margin-top: 0;">Shabby-chic palette</h3>
+                <h3 style="margin-top: 0;">Human WhatsApp flow</h3>
                 <p style="color: #8B7F7F; margin-bottom: 0;">
-                    Dusty rose accents, cream backdrops and warm greys echo the design system defined for the brand
-                    and set the tone for every photoshoot.
+                    Tap the button, chat directly with Yasemin, customise or reserve instantly—no forms, just conversation.
                 </p>
             </article>
         </div>
@@ -136,28 +133,27 @@ include __DIR__ . '/../includes/header.php';
 
 <section class="section">
     <div class="container">
-        <h2 class="section-title">How it works</h2>
+        <h2 class="section-title">Your experience, from first scroll to delivery</h2>
         <ol style="padding-left: 1.25rem; color: #8B7F7F;">
             <li style="margin-bottom: 0.5rem;">
-                Browse the mobile-first gallery to spot the latest available, reserved or sold pieces.
+                Discover the constantly refreshed gallery and shortlist the pieces that resonate.
             </li>
             <li style="margin-bottom: 0.5rem;">
-                Tap the WhatsApp CTA to request a quote, a quick video or material details in real time.
+                Start a WhatsApp chat to get live photos, confirm availability or tailor dimensions.
             </li>
             <li>
-                Finalise the order, pick-up or shipping plan directly with Yasemin in the chat.
+                Secure payment, pickup or shipping arrangements directly with the studio.
             </li>
         </ol>
         <div style="margin-top: 1.5rem;">
-            <h3 style="margin-bottom: 0.5rem;">Who we create for</h3>
+            <h3 style="margin-bottom: 0.5rem;">Built for</h3>
             <ul style="color: #8B7F7F; padding-left: 1.25rem;">
-                <li>Vintage and shabby-chic lovers hunting for statement pieces.</li>
-                <li>Eco-conscious buyers eager to support Swiss craftsmanship.</li>
-                <li>Swiss and European clients who mostly browse on mobile (70%+ expected traffic).</li>
+                <li>Interior designers seeking rare focal points</li>
+                <li>Boutiques and hotels wanting characterful décor</li>
+                <li>Collectors who value sustainable luxury</li>
             </ul>
             <p>
-                Each item is documented from the Gruyère workshop so you can feel the textures, provenance and story
-                whether you are nearby or abroad.
+                Weekly drops mirror what leaves the Gruyère workshop so you can source remotely with the confidence of an in-person visit.
             </p>
         </div>
     </div>

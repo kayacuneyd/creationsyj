@@ -140,6 +140,33 @@ a:hover {
     align-items: center;
 }
 
+.nav-divider {
+    margin: 0 0.5rem;
+    color: #8B7F7F;
+}
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.2rem;
+    width: 42px;
+    height: 42px;
+    border-radius: 9999px;
+    border: 1px solid var(--light-gray);
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.nav-toggle span {
+    display: block;
+    height: 2px;
+    width: 20px;
+    background-color: var(--charcoal);
+    margin: 0 auto;
+    transition: transform 0.2s ease;
+}
+
 .site-footer {
     margin-top: 3rem;
     padding: 2rem 0;
@@ -255,6 +282,42 @@ a:hover {
     }
 }
 
+@media (max-width: 768px) {
+    .site-header-inner {
+        flex-wrap: wrap;
+        padding-right: 1.25rem;
+        padding-left: 1.25rem;
+    }
+
+    .nav-toggle {
+        display: inline-flex;
+    }
+
+    .site-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        background-color: var(--off-white);
+        border: 1px solid var(--light-gray);
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        margin-top: 0.75rem;
+        display: none;
+    }
+
+    .site-nav a {
+        padding: 0.35rem 0;
+    }
+
+    .site-nav.is-open {
+        display: flex;
+    }
+
+    .nav-divider {
+        display: none;
+    }
+}
+
 /* Lightbox/Modal Gallery */
 .product-gallery {
     position: relative;
@@ -263,6 +326,10 @@ a:hover {
 .product-gallery img {
     cursor: pointer;
     transition: opacity 0.2s ease;
+    width: 100%;
+    max-height: 520px;
+    object-fit: cover;
+    border-radius: 0.85rem;
 }
 
 .product-gallery img:hover {
@@ -414,4 +481,3 @@ a:hover {
         height: 35px;
     }
 }
-

@@ -14,9 +14,8 @@ include __DIR__ . '/../includes/header.php';
     <div class="container">
         <h1 class="section-title">À propos de Créations JY</h1>
         <p>
-            Créations JY est l'univers de Yasemin Jemmely, artisane installée en Gruyère qui transforme des matériaux
-            de seconde main, antiques et oubliés en objets décoratifs uniques. Chaque pièce raconte une histoire,
-            pensée pour des intérieurs éclectiques, durables et chaleureux.
+            Créations JY est la maison créative de Yasemin Jemmely, une artisane qui transforme les découvertes de brocante en pièces désirables prêtes à scénariser vos espaces.
+            L’atelier mélange savoir-faire de restauration, direction artistique et service sur-mesure pour offrir un luxe durable, pensé en Suisse et apprécié à l’international.
         </p>
         <?php if ($aboutMediaUrl): ?>
             <div class="about-media-block">
@@ -24,66 +23,56 @@ include __DIR__ . '/../includes/header.php';
                     <img src="<?php echo e($aboutMediaUrl); ?>" alt="Atelier Créations JY" loading="lazy">
                 </figure>
                 <p class="about-media-caption">
-                    Atelier Créations JY · Gruyère — portrait ou logo géré depuis l'administration.
+                    Atelier Créations JY · Gruyère — le lieu où chaque pièce reprend vie.
                 </p>
             </div>
         <?php endif; ?>
         <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin: 1.5rem 0;">
             <article style="background-color: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 12px 32px rgba(0,0,0,0.06);">
-                <h3 style="margin-top: 0;">Atelier en Gruyère</h3>
+                <h3 style="margin-top: 0;">Vision</h3>
                 <p style="color: #8B7F7F; margin-bottom: 0;">
-                    Les créations prennent vie dans un atelier niché entre montagnes et lacs. Sur rendez-vous, vous pouvez
-                    découvrir une sélection de pièces ou imaginer un projet sur mesure.
+                    Offrir des décors émotionnels en valorisant l’existant, plutôt qu’en produisant à nouveau. Chaque création vise à réduire l’empreinte carbone d’un intérieur haut de gamme.
                 </p>
             </article>
             <article style="background-color: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 12px 32px rgba(0,0,0,0.06);">
-                <h3 style="margin-top: 0;">Signature visuelle</h3>
+                <h3 style="margin-top: 0;">Expérience</h3>
                 <p style="color: #8B7F7F; margin-bottom: 0;">
-                    La direction artistique s'appuie sur la palette shabby chic du projet&nbsp;: rose poudré, crème lumineuse
-                    et gris chaleureux pour sublimer chaque shooting et chaque fiche produit.
+                    Photos éditoriales, storytelling précis et conversation directe via WhatsApp pour obtenir la bonne pièce sans quitter votre canapé.
+                </p>
+            </article>
+            <article style="background-color: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 12px 32px rgba(0,0,0,0.06);">
+                <h3 style="margin-top: 0;">Engagement</h3>
+                <p style="color: #8B7F7F; margin-bottom: 0;">
+                    Transparence sur l’origine, le statut et les délais afin que les architectes, décorateurs et particuliers puissent planifier sereinement.
                 </p>
             </article>
         </div>
-        <h2 style="margin-top: 1.5rem;">Manifeste durable</h2>
-        <ul style="color: #8B7F7F; padding-left: 1.25rem;">
-            <li>Réutiliser et magnifier l'existant au lieu de produire de nouvelles matières.</li>
-            <li>Documenter chaque pièce (disponible, réservée, vendue) afin d'assurer transparence et confiance.</li>
-            <li>Faciliter l'échange direct via WhatsApp Business pour garder une relation humaine.</li>
-        </ul>
-        <h2 style="margin-top: 1.5rem;">Processus créatif</h2>
-        <p>
-            De la chine à la livraison, Yasemin suit un protocole précis inspiré du développement roadmap&nbsp;:
-            sourcing local, assemblage artisanal, finitions photographiques prêtes à être partagées en ligne.
-        </p>
+        <h2 style="margin-top: 1.5rem;">Notre méthode</h2>
         <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin: 1rem 0 1.5rem;">
             <article style="background-color: var(--off-white); border-radius: 0.75rem; padding: 1.25rem;">
-                <h3 style="margin-top: 0;">Chine &amp; sélection</h3>
-                <p style="color: #8B7F7F; margin-bottom: 0;">Objets chinés, matériaux anciens et textiles oubliés sont réunis en lots cohérents.</p>
+                <h3 style="margin-top: 0;">1. Collecte curatée</h3>
+                <p style="color: #8B7F7F; margin-bottom: 0;">Trouvailles, textiles et boiseries sont photographiés, triés et stockés comme dans une garde-robe capsule.</p>
             </article>
             <article style="background-color: var(--off-white); border-radius: 0.75rem; padding: 1.25rem;">
-                <h3 style="margin-top: 0;">Assemblage artisanal</h3>
-                <p style="color: #8B7F7F; margin-bottom: 0;">L'atelier utilise des techniques mixtes pour préserver la patine tout en garantissant la solidité.</p>
+                <h3 style="margin-top: 0;">2. Design &amp; restauration</h3>
+                <p style="color: #8B7F7F; margin-bottom: 0;">Assemblages, patines et détails métalliques sont retravaillés pour garantir durabilité et harmonie.</p>
             </article>
             <article style="background-color: var(--off-white); border-radius: 0.75rem; padding: 1.25rem;">
-                <h3 style="margin-top: 0;">Finitions shabby chic</h3>
-                <p style="color: #8B7F7F; margin-bottom: 0;">Textures douces, dorures légères et palette vintage assurent la cohérence de la collection.</p>
+                <h3 style="margin-top: 0;">3. Mise en scène digitale</h3>
+                <p style="color: #8B7F7F; margin-bottom: 0;">Chaque pièce est shootée, mesurée et publiée pour commander en ligne avec la même précision qu’en showroom.</p>
             </article>
         </div>
-        <h2 style="margin-top: 1.5rem;">Services proposés</h2>
+        <h2 style="margin-top: 1.5rem;">Services</h2>
         <ul style="color: #8B7F7F; padding-left: 1.25rem;">
-            <li>Créations prêtes à adopter, présentées avec photos détaillées et dimensions.</li>
-            <li>Commandes personnalisées (restaurations, décorations d'événements, cadeaux d'entreprise).</li>
-            <li>Conseil décoration pour intégrer l'upcycling dans des intérieurs contemporains.</li>
+            <li>Catalogue prêt-à-adopter mis à jour chaque semaine</li>
+            <li>Commandes sur-mesure (comptoirs, têtes de lit, scénographies retail)</li>
+            <li>Location courte durée pour shootings, vitrines et événements</li>
+            <li>Conseil pour intégrer l’upcycling dans des projets de rénovation ou d’identité de marque</li>
         </ul>
-        <h2 style="margin-top: 1.5rem;">Expérience digitale</h2>
+        <h2 style="margin-top: 1.5rem;">Travaillons ensemble</h2>
         <p>
-            Le site s'appuie sur HTML5, Tailwind CSS, PHP&nbsp;8 et MySQL pour offrir une vitrine performante.
-            L'intégration WhatsApp Business permet de gérer les commandes, tandis que l'approche mobile-first
-            répond aux 70&nbsp;% de visiteurs sur smartphone.
-        </p>
-        <p>
-            Que vous soyez en Suisse ou ailleurs en Europe, vous rejoignez directement Yasemin pour imaginer
-            la prochaine création qui racontera votre histoire.
+            Nous parlons français et anglais, collaborons avec des clients privés comme avec des studios d’architecture et livrons partout en Suisse et en Europe.
+            Écrivez-nous sur WhatsApp ou via le formulaire de contact pour imaginer la prochaine pièce qui fera vibrer votre espace.
         </p>
     </div>
 </section>

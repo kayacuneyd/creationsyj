@@ -59,8 +59,8 @@ include __DIR__ . '/../includes/header.php';
     <div class="container">
         <h1 class="section-title">Contact</h1>
         <p>
-            Have a question about a piece, a custom project or a collaboration?
-            Send a message to Yasemin using this form or reach out directly on WhatsApp.
+            Need to reserve a piece, brief a bespoke commission or discuss a professional collaboration?
+            Share the details here and we will respond within one business day. For instant conversation, tap WhatsApp and chat directly with the studio.
         </p>
 
         <?php if ($success): ?>
@@ -106,5 +106,4 @@ include __DIR__ . '/../includes/header.php';
 </section>
 
 <?php include __DIR__ . '/../includes/footer.php'; ?>
-
 

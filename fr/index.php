@@ -47,27 +47,24 @@ include __DIR__ . '/../includes/header.php';
 
 <section class="section" style="background-color: var(--off-white);">
     <div class="container">
-        <h2 class="section-title">La promesse de Créations JY</h2>
+        <h2 class="section-title">Pourquoi les intérieurs amoureux de l’âme vintage nous choisissent</h2>
         <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
             <article style="background-color: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);">
-                <h3 style="margin-top: 0;">Upcycling haut de gamme</h3>
+                <h3 style="margin-top: 0;">Sélection signature</h3>
                 <p style="color: #8B7F7F; margin-bottom: 0;">
-                    La matière première provient de pièces seconde main, antiques et oubliées.
-                    Yasemin les associe pour créer des objets uniques, pensés pour durer.
+                    Chaque matière est chinée en Suisse romande puis restaurée à la main pour préserver patines et histoires.
                 </p>
             </article>
             <article style="background-color: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);">
-                <h3 style="margin-top: 0;">Commande fluide via WhatsApp</h3>
+                <h3 style="margin-top: 0;">Processus boutique</h3>
                 <p style="color: #8B7F7F; margin-bottom: 0;">
-                    Le site fait office de vitrine : vous explorez, demandez un devis via WhatsApp Business
-                    et finalisez la commande directement avec Yasemin.
+                    Les fiches produits détaillent les formats, les textures et les statuts pour que vous sachiez exactement ce que vous adoptez.
                 </p>
             </article>
             <article style="background-color: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);">
-                <h3 style="margin-top: 0;">Palette shabby chic</h3>
+                <h3 style="margin-top: 0;">Accompagnement humain</h3>
                 <p style="color: #8B7F7F; margin-bottom: 0;">
-                    L'univers visuel se base sur des roses poudrés, des crèmes douces et des gris chauds,
-                    pour conserver l'esprit vintage et raffiné du projet.
+                    Une simple discussion WhatsApp suffit pour réserver, commander, personnaliser ou programmer un retrait atelier.
                 </p>
             </article>
         </div>
@@ -137,28 +134,27 @@ include __DIR__ . '/../includes/header.php';
 
 <section class="section">
     <div class="container">
-        <h2 class="section-title">Comment ça marche ?</h2>
+        <h2 class="section-title">Un parcours simple, même depuis votre smartphone</h2>
         <ol style="padding-left: 1.25rem; color: #8B7F7F;">
             <li style="margin-bottom: 0.5rem;">
-                Parcourez la galerie mobile-first pour repérer une pièce disponible, réservée ou vendue.
+                Explorez la galerie mobile pour découvrir les pièces disponibles, les réservations ou les trésors déjà adoptés.
             </li>
             <li style="margin-bottom: 0.5rem;">
-                Ouvrez la conversation WhatsApp pour demander un devis, une vidéo ou des mesures.
+                Appuyez sur « WhatsApp » pour demander des photos live, confirmer une personnalisation ou lancer un devis.
             </li>
             <li>
-                Finalisez la commande, la remise en main propre ou l'expédition directement avec Yasemin.
+                Validez le paiement sécurisé, la livraison ou la collecte atelier directement avec Yasemin.
             </li>
         </ol>
         <div style="margin-top: 1.5rem;">
-            <h3 style="margin-bottom: 0.5rem;">Pour qui créons-nous&nbsp;?</h3>
+            <h3 style="margin-bottom: 0.5rem;">Pensé pour vos projets</h3>
             <ul style="color: #8B7F7F; padding-left: 1.25rem;">
-                <li>Amoureux du vintage et du shabby chic à la recherche de pièces uniques.</li>
-                <li>Consommateurs éco-responsables souhaitant soutenir l'artisanat suisse.</li>
-                <li>Clients suisses et européens, majoritairement mobiles (70&nbsp;% du trafic attendu).</li>
+                <li>Décorations d’intérieur et shootings lifestyle</li>
+                <li>Hôtellerie de charme et boutiques concept</li>
+                <li>Cadeaux d’entreprise responsables</li>
             </ul>
             <p>
-                Toutes les créations sont imaginées dans l'atelier de Gruyère, puis documentées pour vous permettre
-                de vivre l'expérience à distance comme sur place.
+                Nous mettons à jour la collection chaque semaine afin de synchroniser l’expérience digitale sur ce qui sort réellement de l’atelier.
             </p>
         </div>
     </div>
