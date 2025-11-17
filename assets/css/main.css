@@ -137,7 +137,7 @@ a:hover {
 
 .site-logo img {
     max-height: 75px;
-    max-width: min(250px, 45vw);
+    max-width: min(300px, 45vw);
     width: auto;
     height: auto;
     display: block;
