@@ -135,12 +135,17 @@ a:hover {
     position: relative;
 }
 
+.site-logo {
+    flex: 0 1 45vw;
+    max-width: 300px;
+}
+
 .site-logo img {
-    max-height: 75px;
-    max-width: min(300px, 45vw);
-    width: auto;
-    height: auto;
     display: block;
+    width: 100%;
+    height: auto;
+    max-height: 75px;
+    object-fit: contain;
 }
 
 .site-nav {
