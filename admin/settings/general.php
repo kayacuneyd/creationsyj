@@ -111,12 +111,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $uploadedPaths = [];
 
-        $allowedMime = ['image/jpeg', 'image/png', 'image/webp'];
+        $allowedMime = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'];
         $maxSize = 2 * 1024 * 1024;
 
         if ($siteLogoFile && $siteLogoFile['error'] === UPLOAD_ERR_OK) {
             if (!in_array($siteLogoFile['type'], $allowedMime, true)) {
-                $errors[] = 'Logo must be a JPG, PNG or WebP file.';
+                $errors[] = 'Logo must be a JPG, PNG, WebP or SVG file.';
             } elseif ($siteLogoFile['size'] > $maxSize) {
                 $errors[] = 'Logo must be under 2MB.';
             } else {
@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($aboutMediaFile && $aboutMediaFile['error'] === UPLOAD_ERR_OK) {
             if (!in_array($aboutMediaFile['type'], $allowedMime, true)) {
-                $errors[] = 'Media must be a JPG, PNG or WebP file.';
+                $errors[] = 'Media must be a JPG, PNG, WebP or SVG file.';
             } elseif ($aboutMediaFile['size'] > $maxSize) {
                 $errors[] = 'Media must be under 2MB.';
             } else {
@@ -354,7 +354,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="settings-grid">
                     <div>
                         <label for="site_logo_file">Upload logo</label>
-                        <input id="site_logo_file" name="site_logo_file" type="file" class="input" accept="image/*">
+                        <input id="site_logo_file" name="site_logo_file" type="file" class="input" accept="image/*,.svg">
                         <small>Recommended height 42px, formats JPG/PNG/WebP.</small>
                     </div>
                     <div>
